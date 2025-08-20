@@ -1,3 +1,18 @@
 <resources>
+    <!--Splash Screen -->
     <string name="app_name">2-Do List App</string>
+    <string name="developer_name">By Héctor Islas</string>
+    <string name="app_title_My">My</string>
+    <string name="app_title_2do">2-Do</string>
+    <string name="app_title_list">List</string>
+
+    <!--Authentication Login -->
+    <string name="hint_Email">Email</string>
+    <string name="hint_Password">Contraseña</string>
+    <string name="btn_text_sign_in">Ingresar</string>
+    <string name="btn_text_sign_up">Registrate aquí</string>
+    <string name="text_Email">Email</string>
+    <string name="text_Password">Contraseña</string>
+    <string name="text_no_account">No tienes una cuenta?</string>
+    <string name="text_switch_theme">Cambiar tema</string>
 </resources>
