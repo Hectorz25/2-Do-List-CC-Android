@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "966471079160",
+    "project_id": "to-do-list-app-hiz-cc-2025",
+    "storage_bucket": "to-do-list-app-hiz-cc-2025.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966471079160:android:c5dda31952d7cb99a8170d",
+        "android_client_info": {
+          "package_name": "com.examenconcredito.a2_dolistapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoJO7jto8-tAkkzv1qEXxJSEcEwu-dBwI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
