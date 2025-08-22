@@ -2,6 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
     <color name="splash_background">#FFFFFFFF</color>
     <color name="md_theme_primary">#006A69</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>

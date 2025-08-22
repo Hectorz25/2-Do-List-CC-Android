@@ -47,11 +47,9 @@ class SplashScreenActivity : AppCompatActivity() {
                 v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
                 insets
             }
-
             checkUserSession()
-
         } catch (e: Exception) {
-            println("DEBUG: FATAL ERROR in onCreate: ${e.message}")
+            println("DEBUG: FATAL ERROR IN ONCREATE: ${e.message}")
             e.printStackTrace()
             redirectToAuth()
         }
@@ -60,35 +58,32 @@ class SplashScreenActivity : AppCompatActivity() {
     private fun checkUserSession() {
         lifecycleScope.launch {
             try {
-                // CHECK USER IN FIREBASE AUTH
+                // CHECK FIREBASE AUTH USER FIRST
                 val currentFirebaseUser = auth.currentUser
 
                 if (currentFirebaseUser != null) {
-                    // USER IN FIREBASE AUTH - CHECK IF EXISTS IN FIRESTORE
+                    // FIREBASE USER AUTHENTICATED - CHECK FIRESTORE
                     val firestoreUser = getFirestoreUser(currentFirebaseUser.uid)
 
                     if (firestoreUser != null) {
-                        if (firestoreUser.login) {
-                            // USER EXISTS AND IS LOGGED IN
-                            migrateFromLocalToFirebaseUser(currentFirebaseUser.uid, firestoreUser)
-                            redirectToHome(firestoreUser)
-                        } else {
-                            // USER EXISTS BUT LOGIN = FALSE
-                            redirectToAuth()
+                        // SAVE USER TO LOCAL DB AND REDIRECT
+                        withContext(Dispatchers.IO) {
+                            db.userDao().deleteAllUsers()
+                            db.userDao().insertUser(firestoreUser.copy(login = true))
                         }
+                        redirectToHome(firestoreUser)
                     } else {
-                        // USER IN FIREBASE AUTH BUT NOT IN FIRESTORE - CREATE IT
+                        // CREATE NEW USER IN FIRESTORE IF NOT EXISTS (FOR EMAIL/PASSWORD USERS)
                         createNewFirebaseUser(currentFirebaseUser)
                     }
                     return@launch
                 }
 
-                // NO USER IN FIREBASE AUTH, CHECK LOCALLY
+                // NO FIREBASE USER - CHECK LOCAL USER
                 checkLocalUser()
 
             } catch (e: Exception) {
-                // IF ANY ERROR, REDIRECT TO AUTH
-                println("DEBUG: Exception occurred: ${e.message}")
+                println("DEBUG: EXCEPTION OCCURRED: ${e.message}")
                 redirectToAuth()
             }
         }
@@ -96,30 +91,13 @@ class SplashScreenActivity : AppCompatActivity() {
 
     private suspend fun checkLocalUser() {
         val localUser = withContext(Dispatchers.IO) {
-            db.userDao().getUserById(persistentDeviceId)
+            db.userDao().getFirstUser() // GET ANY EXISTING USER
         }
 
-        if (localUser != null) {
-            if (localUser.login) {
-                redirectToHome(localUser)
-            } else {
-                redirectToAuth()
-            }
+        if (localUser != null && localUser.login) {
+            redirectToHome(localUser)
         } else {
-            // NO USER ANYWHERE
             redirectToAuth()
-        }
-    }
-
-    private suspend fun migrateFromLocalToFirebaseUser(firebaseUid: String, firebaseUser: UserEntity) {
-        withContext(Dispatchers.IO) {
-            // DELETE OLD LOCAL USER
-            val localUser = db.userDao().getUserById(persistentDeviceId)
-            localUser?.let {
-                db.userDao().deleteUser(it)
-            }
-            db.userDao().insertUser(firebaseUser)
-            preferenceHelper.saveString("device_id", firebaseUid)
         }
     }
 
@@ -134,15 +112,19 @@ class SplashScreenActivity : AppCompatActivity() {
             login = true
         )
 
-        // SAVE IN FIRESTORE
         try {
+            // SAVE TO FIRESTORE
             firestore.collection("users")
                 .document(firebaseUser.uid)
                 .set(newUser)
                 .await()
 
-            // MIGRATE FROM LOCAL
-            migrateFromLocalToFirebaseUser(firebaseUser.uid, newUser)
+            // SAVE TO LOCAL DB
+            withContext(Dispatchers.IO) {
+                db.userDao().deleteAllUsers()
+                db.userDao().insertUser(newUser)
+            }
+
             redirectToHome(newUser)
 
         } catch (e: Exception) {
@@ -152,20 +134,9 @@ class SplashScreenActivity : AppCompatActivity() {
 
     private suspend fun getFirestoreUser(userId: String): UserEntity? {
         return try {
-            if (userId.isBlank()) {
-                return null
-            }
-
-            val document = firestore.collection("users")
-                .document(userId)
-                .get()
-                .await()
-
-            if (document.exists()) {
-                document.toObject(UserEntity::class.java)
-            } else {
-                null
-            }
+            if (userId.isBlank()) return null
+            val document = firestore.collection("users").document(userId).get().await()
+            if (document.exists()) document.toObject(UserEntity::class.java) else null
         } catch (e: Exception) {
             null
         }

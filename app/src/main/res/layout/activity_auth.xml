@@ -1,39 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="24dp"
     tools:context=".AuthActivity">
 
-    <!--LABELS-->
+    <!-- MAIN TITLE -->
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvLogin"
+        android:id="@+id/tvAlreadyAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="40dp"
         android:text="@string/text_title_login"
         android:textSize="25sp"
         android:textStyle="bold"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/etEmail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.889" />
+        android:textAlignment="center" />
 
-    <!-- INPUT EMAIL -->
+    <!-- EMAIL -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/etEmail"
+        android:id="@+id/tilEmail"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="170dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_marginBottom="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_Email"
@@ -41,17 +38,17 @@
             tools:ignore="TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- INPUT PASSWORD -->
+    <!-- PASSWORD -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/etPass"
+        android:id="@+id/tilPassword"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etEmail">
+        android:layout_marginBottom="10dp"
+        app:endIconMode="password_toggle"
+        app:endIconTint="@color/md_theme_primary">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_Password"
@@ -59,16 +56,31 @@
             tools:ignore="TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- NO ACCOUNT + REGISTER LINK -->
+    <!-- SIGN IN BUTTON -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSignInEmail"
+        android:layout_width="220dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/btn_text_sign_in"
+        android:backgroundTint="@color/md_theme_primary"
+        android:textColor="@android:color/white" />
+
+    <!-- PROGRESS BAR -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <!-- NO ACCOUNT + REGISTER -->
     <LinearLayout
         android:id="@+id/llRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etPass">
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvNoAccount"
@@ -85,100 +97,96 @@
             android:focusable="true"
             android:paddingStart="6dp"
             android:text="@string/btn_text_sign_up"
-            android:textColor="?attr/colorPrimary"
+            android:textColor="@color/md_theme_primary"
             android:textSize="14sp"
             android:textStyle="bold"
             tools:ignore="RtlSymmetry,TouchTargetSizeCheck" />
     </LinearLayout>
 
-    <!-- BUTTON SIGN IN -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSignIn"
-        android:layout_width="220dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/btn_text_sign_in"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llRegister" />
-
-    <!--DIVIDER-->
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider_left"
-        android:layout_width="100dp"
+    <!-- DIVIDER WITH "OR" TEXT -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="84dp"
-        android:layout_toStartOf="@+id/text_middle"
-        app:layout_constraintBottom_toTopOf="@+id/btnSignInGoogle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSignIn"
-        app:layout_constraintVertical_bias="0.466" />
+        android:gravity="center"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/text_middle"
-        android:layout_width="wrap_content"
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="100dp"
+            android:layout_height="1dp"
+            android:layout_marginEnd="8dp" />
+
+        <TextView
+            android:id="@+id/text_middle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_or"
+            android:textSize="15sp"
+            android:paddingHorizontal="8dp"
+            tools:ignore="TextSizeCheck" />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="100dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
+
+    <!-- GOOGLE AND GUEST SIGN IN BUTTONS -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/text_or"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/btnSignInGoogle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSignIn"
-        tools:ignore="TextSizeCheck" />
+        android:layout_marginBottom="45dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/divider_right"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="84dp"
-        android:layout_toEndOf="@+id/text_middle"
-        app:layout_constraintBottom_toTopOf="@+id/btnSignInGoogle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSignIn"
-        app:layout_constraintVertical_bias="0.466" />
+        <!-- GOOGLE BUTTON (ROUND) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSignInGoogle"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/md_theme_primary"
+            android:contentDescription="@string/btn_text_signup_google"
+            app:icon="@drawable/ic_google"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
+            app:iconTint="@android:color/white"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.App.LargeComponent.Round" />
 
-    <!--BUTTON SIGN IN WITH GOOGLE-->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSignInGoogle"
-        android:layout_width="220dp"
-        android:layout_height="48dp"
-        android:text="@string/btn_text_signup_google"
-        app:layout_constraintBottom_toTopOf="@+id/tvSwitchTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSignIn"
-        app:layout_constraintVertical_bias="0.156"
-        tools:ignore="TextSizeCheck" />
+        <!-- GUEST BUTTON -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSignInGuest"
+            android:layout_width="wrap_content"
+            android:minWidth="120dp"
+            android:layout_marginStart="8dp"
+            android:layout_height="56dp"
+            android:text="@string/btn_text_signup_guest"
+            android:backgroundTint="@color/md_theme_primary"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
 
-    <!-- SWITCH THEME LABEL -->
+    <!-- THEME SWITCH LABEL -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvSwitchTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/text_swTheme"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/swThemeSelector"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnSignIn"
-        app:layout_constraintVertical_bias="1.0" />
 
-    <!-- SWITCH THEME -->
+        android:text="@string/text_swTheme"
+        android:textSize="14sp" />
+
+    <!-- THEME SWITCH -->
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/swThemeSelector"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="116dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="40dp"
         tools:ignore="TextContrastCheck" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- FRAGMENT CONTAINER (HIDDEN BY DEFAULT) -->
+    <FrameLayout
+        android:id="@+id/auth_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone"/>
+
+</LinearLayout>

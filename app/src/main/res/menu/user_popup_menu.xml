@@ -3,13 +3,9 @@
     <item
         android:id="@+id/popup_profile"
         android:icon="@drawable/ic_user"
-        android:title="Profile" />
-    <item
-        android:id="@+id/popup_settings"
-        android:icon="@drawable/ic_settings"
-        android:title="Settings" />
+        android:title="@string/text_profile" />
     <item
         android:id="@+id/popup_logout"
         android:icon="@drawable/ic_logout"
-        android:title="Logout" />
+        android:title="@string/text_logout" />
 </menu>
