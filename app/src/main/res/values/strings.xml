@@ -15,7 +15,14 @@
     <string name="text_Email">Email</string>
     <string name="text_Password">Contraseña</string>
     <string name="text_no_account">No tienes una cuenta?</string>
-    <string name="text_switch_theme">Cambiar tema</string>
     <string name="text_or">O</string>
-    <string name="btn_text_signup_google">Iniciar Sesión con Google</string>
+    <string name="btn_text_signup_google">Iniciar sesión con Google</string>
+    <string name="default_web_client_id">966471079160-ce487s43rv9ibrcv3oaoai7s0q1so7r9.apps.googleusercontent.com</string>
+
+    <!--General-->
+    <string name="text_logout">Cerrar sesión</string>
+    <string name="text_swTheme">Cambiar tema</string>
+    <string name="text_user">Usuario</string>
+    <string name="text_user_info">Mi Información</string>
+    <string name="text_loading">Cargando...</string>
 </resources>

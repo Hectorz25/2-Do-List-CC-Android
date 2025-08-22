@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "966471079160-ctkijj23lenolouv42l3flhtsb3b356l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.examenconcredito.a2_dolistapp",
+            "certificate_hash": "589bd3ff37c52c71eef1efd28804f1e1d4b35ee2"
+          }
+        },
+        {
           "client_id": "966471079160-ce487s43rv9ibrcv3oaoai7s0q1so7r9.apps.googleusercontent.com",
           "client_type": 3
         }

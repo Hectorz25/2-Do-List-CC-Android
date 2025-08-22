@@ -1,4 +1,5 @@
 <resources>
+    <color name="splash_background">#FF000000</color>
     <color name="md_theme_primary">#80D5D3</color>
     <color name="md_theme_onPrimary">#003736</color>
     <color name="md_theme_primaryContainer">#00504F</color>

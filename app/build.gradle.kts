@@ -35,6 +35,10 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
+    }
 }
 
 dependencies {
@@ -49,14 +53,18 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    // GOOGLE
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.firestore)
+
     implementation(libs.androidx.credentials)
     implementation(libs.credentials.play.services.auth)
-    implementation(libs.googleid)
+    //implementation(libs.googleid)
 
     // Room
     implementation(libs.androidx.room.runtime)
