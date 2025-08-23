@@ -12,6 +12,7 @@ import com.examenconcredito.a2_dolistapp.data.database.AppDatabase
 import com.examenconcredito.a2_dolistapp.data.entities.UserEntity
 import com.examenconcredito.a2_dolistapp.data.utils.PreferenceHelper
 import com.examenconcredito.a2_dolistapp.databinding.ActivitySplashscreenBinding
+import com.examenconcredito.a2_dolistapp.utils.ActivityExtensions.navigateTo
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -152,12 +153,7 @@ class SplashScreenActivity : AppCompatActivity() {
                 putExtra("USER_EMAIL", user.email)
                 putExtra("USER_LOGIN", user.login)
             }
-            val options = ActivityOptions.makeCustomAnimation(
-                this,
-                android.R.anim.fade_in,
-                android.R.anim.fade_out
-            )
-            startActivity(intent, options.toBundle())
+            navigateTo(intent, R.anim.slide_in_right, R.anim.slide_out_left)
             finish()
         }, SPLASH_DELAY)
     }
@@ -165,12 +161,7 @@ class SplashScreenActivity : AppCompatActivity() {
     private fun redirectToAuth() {
         binding.root.postDelayed({
             val intent = Intent(this@SplashScreenActivity, AuthActivity::class.java)
-            val options = ActivityOptions.makeCustomAnimation(
-                this,
-                android.R.anim.fade_in,
-                android.R.anim.fade_out
-            )
-            startActivity(intent, options.toBundle())
+            navigateTo(intent, R.anim.slide_in_right, R.anim.slide_out_left)
             finish()
         }, SPLASH_DELAY)
     }

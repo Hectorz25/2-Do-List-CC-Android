@@ -19,6 +19,7 @@ import com.examenconcredito.a2_dolistapp.databinding.ActivityHomeBinding
 import com.examenconcredito.a2_dolistapp.ui.adapters.TaskListAdapter
 import com.examenconcredito.a2_dolistapp.ui.fragments.CreateListBottomSheetFragment
 import com.examenconcredito.a2_dolistapp.ui.fragments.EditListBottomSheetFragment
+import com.examenconcredito.a2_dolistapp.utils.ActivityExtensions.navigateTo
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -249,7 +250,7 @@ class HomeActivity : AppCompatActivity(),
                 withContext(Dispatchers.Main) {
                     val intent = Intent(this@HomeActivity, AuthActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
+                    navigateTo(intent, R.anim.slide_in_left, R.anim.slide_out_right)
                     finish()
                 }
             } catch (e: Exception) {

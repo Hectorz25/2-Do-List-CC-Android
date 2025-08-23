@@ -6,7 +6,10 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
+import com.examenconcredito.a2_dolistapp.AuthActivity
 import com.examenconcredito.a2_dolistapp.HomeActivity
 import com.examenconcredito.a2_dolistapp.R
 import com.examenconcredito.a2_dolistapp.data.database.AppDatabase
@@ -35,7 +38,6 @@ class RegisterBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // APPLY CUSTOM STYLE FOR BOTTOM SHEET
         setStyle(STYLE_NORMAL, R.style.BottomSheetDialogTheme)
     }
 
@@ -56,49 +58,56 @@ class RegisterBottomSheetFragment : BottomSheetDialogFragment() {
         preferenceHelper = PreferenceHelper(requireContext())
 
         setupClickListeners()
+        setupBottomSheetBehavior()
+
+        // Forzar que el teclado se muestre al abrir el fragment
+        binding.etName.requestFocus()
+        showKeyboard()
     }
+
+    private fun showKeyboard() {
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+    }
+
+    private fun hideKeyboard() {
+        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+    }
+
     private fun setupBottomSheetBehavior() {
-        // CONFIGURAR EL COMPORTAMIENTO DEL BOTTOM SHEET
         val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
         bottomSheet?.let {
             val behavior = BottomSheetBehavior.from(it)
-
-            // PERMITIR QUE EL TECLADO EMPUJE EL MODAL
             behavior.isFitToContents = false
             behavior.isHideable = false
             behavior.skipCollapsed = true
-
-            // EXPANDIR COMPLETAMENTE AL INICIO
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
 
-            // AGREGAR LISTENER PARA MANEJAR EL TECLADO
             behavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    // MANTENER EXPANDIDO SIEMPRE
                     if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
                         behavior.state = BottomSheetBehavior.STATE_EXPANDED
                     }
                 }
 
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                    // NO SE NECESITA IMPLEMENTAR
+                    // No implementation needed
                 }
             })
         }
     }
+
     override fun onStart() {
         super.onStart()
-        // ASEGURARSE DE QUE ESTÉ EXPANDIDO AL INICIAR
         val behavior = BottomSheetBehavior.from(requireView().parent as View)
         behavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
+
     private fun setupClickListeners() {
         binding.btnRegister.setOnClickListener {
             registerUser()
         }
 
         binding.tvLogin.setOnClickListener {
-            // CLOSE THE BOTTOM SHEET AND GO BACK TO LOGIN
             dismiss()
         }
     }
@@ -111,6 +120,9 @@ class RegisterBottomSheetFragment : BottomSheetDialogFragment() {
         val password = binding.etPassword.text.toString().trim()
 
         if (validateInputs(name, lastName, username, email, password)) {
+            hideKeyboard()
+            showLoading()
+            binding.btnRegister.isEnabled = false
             createUserWithEmail(email, password, name, lastName, username)
         }
     }
@@ -122,27 +134,34 @@ class RegisterBottomSheetFragment : BottomSheetDialogFragment() {
         email: String,
         password: String
     ): Boolean {
+        var isValid = true
+
         if (name.isEmpty()) {
             binding.etName.error = "El nombre es requerido"
-            return false
+            isValid = false
         }
+
         if (lastName.isEmpty()) {
             binding.etLastName.error = "El apellido es requerido"
-            return false
+            isValid = false
         }
+
         if (username.isEmpty()) {
             binding.etUsername.error = "El nombre de usuario es requerido"
-            return false
+            isValid = false
         }
+
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.etEmail.error = "Correo electrónico inválido"
-            return false
+            isValid = false
         }
+
         if (password.length < 6) {
             binding.etPassword.error = "La contraseña debe tener al menos 6 caracteres"
-            return false
+            isValid = false
         }
-        return true
+
+        return isValid
     }
 
     private fun createUserWithEmail(
@@ -152,8 +171,6 @@ class RegisterBottomSheetFragment : BottomSheetDialogFragment() {
         lastName: String,
         username: String
     ) {
-        binding.btnRegister.isEnabled = false
-
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
@@ -162,6 +179,7 @@ class RegisterBottomSheetFragment : BottomSheetDialogFragment() {
                         saveUserToFirestoreAndLocal(it, name, lastName, username, email)
                     }
                 } else {
+                    hideLoading()
                     binding.btnRegister.isEnabled = true
                     Toast.makeText(
                         requireContext(),
@@ -189,15 +207,14 @@ class RegisterBottomSheetFragment : BottomSheetDialogFragment() {
             login = true
         )
 
-        // SAVE TO FIRESTORE
         firestore.collection("users")
             .document(firebaseUser.uid)
             .set(userEntity)
             .addOnSuccessListener {
-                // SAVE TO LOCAL AND REDIRECT
                 saveUserToLocalAndRedirect(userEntity)
             }
             .addOnFailureListener { e ->
+                hideLoading()
                 binding.btnRegister.isEnabled = true
                 Toast.makeText(
                     requireContext(),
@@ -209,14 +226,11 @@ class RegisterBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun saveUserToLocalAndRedirect(userEntity: UserEntity) {
         CoroutineScope(Dispatchers.IO).launch {
-            // SAVE TO LOCAL DATABASE
             db.userDao().insertUser(userEntity)
-
-            // SAVE FIREBASE UID FOR FUTURE SESSIONS
             preferenceHelper.saveFirebaseUid(userEntity.id)
 
             withContext(Dispatchers.Main) {
-                // REDIRECT TO HOME
+                hideLoading()
                 val intent = Intent(requireContext(), HomeActivity::class.java).apply {
                     putExtra("USER_ID", userEntity.id)
                     putExtra("USER_NAME", userEntity.name)
@@ -229,6 +243,16 @@ class RegisterBottomSheetFragment : BottomSheetDialogFragment() {
                 requireActivity().finish()
             }
         }
+    }
+
+    private fun showLoading() {
+        binding.loadingOverlay.visibility = View.VISIBLE
+        binding.lottieLoadingAnimation.playAnimation()
+    }
+
+    private fun hideLoading() {
+        binding.loadingOverlay.visibility = View.GONE
+        binding.lottieLoadingAnimation.cancelAnimation()
     }
 
     override fun onDestroyView() {

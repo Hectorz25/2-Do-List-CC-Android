@@ -1,194 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
-    android:padding="24dp"
-    tools:context=".AuthActivity">
+    android:layout_height="match_parent">
 
-    <!-- MAIN TITLE -->
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvAlreadyAccount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="40dp"
-        android:text="@string/text_title_login"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:textAlignment="center" />
-
-    <!-- EMAIL -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilEmail"
-        android:layout_width="280dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_Email"
-            android:inputType="textEmailAddress|textNoSuggestions"
-            android:importantForAutofill="no"
-            tools:ignore="TextContrastCheck" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <!-- PASSWORD -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilPassword"
-        android:layout_width="280dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        app:endIconMode="password_toggle"
-        app:endIconTint="@color/md_theme_primary">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/hint_Password"
-            android:importantForAccessibility="no"
-            android:inputType="textPassword|textNoSuggestions"
-            tools:ignore="TextContrastCheck" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <!-- SIGN IN BUTTON -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSignInEmail"
-        android:layout_width="220dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="10dp"
-        android:text="@string/btn_text_sign_in"
-        android:backgroundTint="@color/md_theme_primary"
-        android:textColor="@android:color/white" />
-
-    <!-- PROGRESS BAR -->
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
-
-    <!-- NO ACCOUNT + REGISTER -->
     <LinearLayout
-        android:id="@+id/llRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="24dp"
+        tools:context=".AuthActivity">
 
+        <!-- MAIN TITLE -->
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvNoAccount"
+            android:id="@+id/tvAlreadyAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/text_no_account"
-            android:textSize="14sp" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvRegisterHere"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:paddingStart="6dp"
-            android:text="@string/btn_text_sign_up"
-            android:textColor="@color/md_theme_primary"
-            android:textSize="14sp"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="40dp"
+            android:text="@string/text_title_login"
+            android:textSize="25sp"
             android:textStyle="bold"
-            tools:ignore="RtlSymmetry,TouchTargetSizeCheck" />
-    </LinearLayout>
+            android:textAlignment="center" />
 
-    <!-- DIVIDER WITH "OR" TEXT -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="100dp"
-            android:layout_height="1dp"
-            android:layout_marginEnd="8dp" />
-
-        <TextView
-            android:id="@+id/text_middle"
-            android:layout_width="wrap_content"
+        <!-- EMAIL -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilEmail"
+            android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:text="@string/text_or"
-            android:textSize="15sp"
-            android:paddingHorizontal="8dp"
-            tools:ignore="TextSizeCheck" />
+            android:layout_marginBottom="10dp">
 
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="100dp"
-            android:layout_height="1dp"
-            android:layout_marginStart="8dp" />
-    </LinearLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_Email"
+                android:inputType="textEmailAddress|textNoSuggestions"
+                android:importantForAutofill="no"
+                tools:ignore="TextContrastCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- GOOGLE AND GUEST SIGN IN BUTTONS -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="45dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+        <!-- PASSWORD -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilPassword"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:endIconMode="password_toggle"
+            app:endIconTint="@color/md_theme_primary">
 
-        <!-- GOOGLE BUTTON (ROUND) -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_Password"
+                android:importantForAccessibility="no"
+                android:inputType="textPassword|textNoSuggestions"
+                tools:ignore="TextContrastCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- SIGN IN BUTTON -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSignInGoogle"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/md_theme_primary"
-            android:contentDescription="@string/btn_text_signup_google"
-            app:icon="@drawable/ic_google"
-            app:iconGravity="textStart"
-            app:iconPadding="0dp"
-            app:iconTint="@android:color/white"
-            app:shapeAppearanceOverlay="@style/ShapeAppearance.App.LargeComponent.Round" />
-
-        <!-- GUEST BUTTON -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSignInGuest"
-            android:layout_width="wrap_content"
-            android:minWidth="120dp"
-            android:layout_marginStart="8dp"
-            android:layout_height="56dp"
-            android:text="@string/btn_text_signup_guest"
+            android:id="@+id/btnSignInEmail"
+            android:layout_width="220dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/btn_text_sign_in"
             android:backgroundTint="@color/md_theme_primary"
             android:textColor="@android:color/white" />
+
+        <!-- PROGRESS BAR -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <!-- NO ACCOUNT + REGISTER -->
+        <LinearLayout
+            android:id="@+id/llRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvNoAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_no_account"
+                android:textSize="14sp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvRegisterHere"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingStart="6dp"
+                android:text="@string/btn_text_sign_up"
+                android:textColor="@color/md_theme_primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:ignore="RtlSymmetry,TouchTargetSizeCheck" />
+        </LinearLayout>
+
+        <!-- DIVIDER WITH "OR" TEXT -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="100dp"
+                android:layout_height="1dp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/text_middle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_or"
+                android:textSize="15sp"
+                android:paddingHorizontal="8dp"
+                tools:ignore="TextSizeCheck" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="100dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
+
+        <!-- GOOGLE AND GUEST SIGN IN BUTTONS -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="45dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!-- GOOGLE BUTTON (ROUND) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSignInGoogle"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/md_theme_primary"
+                android:contentDescription="@string/btn_text_signup_google"
+                app:icon="@drawable/ic_google"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconTint="@android:color/white"
+                app:shapeAppearanceOverlay="@style/ShapeAppearance.App.LargeComponent.Round" />
+
+            <!-- GUEST BUTTON -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSignInGuest"
+                android:layout_width="wrap_content"
+                android:minWidth="120dp"
+                android:layout_marginStart="8dp"
+                android:layout_height="56dp"
+                android:text="@string/btn_text_signup_guest"
+                android:backgroundTint="@color/md_theme_primary"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <!-- THEME SWITCH LABEL -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvSwitchTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_swTheme"
+            android:textSize="14sp" />
+
+        <!-- THEME SWITCH -->
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/swThemeSelector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            tools:ignore="TextContrastCheck" />
+
+        <!-- FRAGMENT CONTAINER (HIDDEN BY DEFAULT) -->
+        <FrameLayout
+            android:id="@+id/auth_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="gone"/>
     </LinearLayout>
 
-    <!-- THEME SWITCH LABEL -->
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvSwitchTheme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:text="@string/text_swTheme"
-        android:textSize="14sp" />
-
-    <!-- THEME SWITCH -->
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/swThemeSelector"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        tools:ignore="TextContrastCheck" />
-
-    <!-- FRAGMENT CONTAINER (HIDDEN BY DEFAULT) -->
-    <FrameLayout
-        android:id="@+id/auth_container"
+    <!-- LOADING OVERLAY -->
+    <RelativeLayout
+        android:id="@+id/loadingOverlay"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:visibility="gone"/>
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true">
 
-</LinearLayout>
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieLoadingAnimation"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/loadingcircleanimation"
+            app:lottie_speed="1.5" />
+
+    </RelativeLayout>
+</RelativeLayout>

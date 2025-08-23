@@ -2,6 +2,10 @@ package com.examenconcredito.a2_dolistapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.View
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,8 +27,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import android.widget.Toast
 import com.examenconcredito.a2_dolistapp.ui.fragments.RegisterBottomSheetFragment
+import com.examenconcredito.a2_dolistapp.utils.ActivityExtensions.navigateTo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -37,12 +41,11 @@ class AuthActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAuthBinding
     private val auth by lazy { Firebase.auth }
     private val firestore by lazy { Firebase.firestore }
+    private val handler = Handler(Looper.getMainLooper())
 
-    // VARIABLE TO PREVENT SWITCH RECURSION
     private var isThemeChangeInProgress = false
     private var isInRegisterFragment = false
 
-    // RESULT FROM GOOGLE
     private val googleSignInLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -52,7 +55,6 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    // BACK PRESS
     private val onBackPressedCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
             if (isInRegisterFragment) {
@@ -62,7 +64,6 @@ class AuthActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // APPLY SAVED THEME BEFORE SUPER
         preferenceHelper.applySavedTheme()
         super.onCreate(savedInstanceState)
 
@@ -70,7 +71,6 @@ class AuthActivity : AppCompatActivity() {
         setContentView(binding.root)
         enableEdgeToEdge()
 
-        // SETUP BACK PRESS CALLBACK
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
@@ -80,32 +80,21 @@ class AuthActivity : AppCompatActivity() {
         }
 
         binding.root.post {
-            // SETUP THEME SWITCH WITH RECURSION PROTECTION
             val swDarkMode = findViewById<SwitchMaterial>(R.id.swThemeSelector)
             swDarkMode.isChecked = preferenceHelper.isDarkModeEnabled()
 
             swDarkMode.setOnCheckedChangeListener { _, isSelected ->
                 if (isThemeChangeInProgress) return@setOnCheckedChangeListener
-
                 isThemeChangeInProgress = true
-                if (isSelected) {
-                    enableDarkMode()
-                } else {
-                    disableDarkMode()
-                }
-                // SAVE THEME PREFERENCE
+                if (isSelected) enableDarkMode() else disableDarkMode()
                 preferenceHelper.setDarkModeEnabled(isSelected)
-
-                // RESET FLAG AFTER DELAY
-                swDarkMode.postDelayed({
-                    isThemeChangeInProgress = false
-                }, 1000)
+                swDarkMode.postDelayed({ isThemeChangeInProgress = false }, 1000)
             }
 
             setupGoogleSignInButton()
             setupRegisterButton()
             setupGuestSignInButton()
-            setupEmailSignInButton() // SETUP EMAIL SIGN IN BUTTON
+            setupEmailSignInButton()
         }
     }
 
@@ -142,26 +131,18 @@ class AuthActivity : AppCompatActivity() {
             return
         }
 
-        binding.progressBar.isVisible = true
+        showLoading()
         binding.btnSignInEmail.isEnabled = false
 
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                binding.progressBar.isVisible = false
                 binding.btnSignInEmail.isEnabled = true
-
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    user?.let {
-                        // CHECK IF USER EXISTS IN FIRESTORE
-                        checkFirestoreUserAndRedirect(it.uid)
-                    }
+                    user?.let { checkFirestoreUserAndRedirect(it.uid) }
                 } else {
-                    Toast.makeText(
-                        this,
-                        "Fallo al iniciar sesión: ${task.exception?.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    hideLoading()
+                    Toast.makeText(this, "Fallo al iniciar sesión: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }
@@ -171,26 +152,19 @@ class AuthActivity : AppCompatActivity() {
             try {
                 val firestoreUser = getFirestoreUser(userId)
                 if (firestoreUser != null) {
-                    // SAVE USER TO LOCAL DB AND REDIRECT
                     withContext(Dispatchers.IO) {
                         db.userDao().deleteAllUsers()
                         db.userDao().insertUser(firestoreUser.copy(login = true))
                     }
-                    redirectToHome(firestoreUser)
+                    delayedRedirectToHome(firestoreUser)
                 } else {
-                    Toast.makeText(
-                        this@AuthActivity,
-                        "USER NOT FOUND IN DATABASE",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    hideLoading()
+                    Toast.makeText(this@AuthActivity, "USER NOT FOUND IN DATABASE", Toast.LENGTH_SHORT).show()
                     auth.signOut()
                 }
             } catch (e: Exception) {
-                Toast.makeText(
-                    this@AuthActivity,
-                    "ERROR: ${e.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                hideLoading()
+                Toast.makeText(this@AuthActivity, "ERROR: ${e.message}", Toast.LENGTH_SHORT).show()
                 auth.signOut()
             }
         }
@@ -207,12 +181,10 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun signInAsGuest() {
+        showLoading()
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                // DELETE ALL EXISTING USERS
                 db.userDao().deleteAllUsers()
-
-                // CREATE NEW GUEST USER WITH CORRECT DEVICE ID
                 val guestUser = UserEntity(
                     id = persistentDeviceId,
                     name = "Invitado",
@@ -222,27 +194,21 @@ class AuthActivity : AppCompatActivity() {
                     password = "",
                     login = true
                 )
-
-                // SAVE USER
                 db.userDao().insertUser(guestUser)
-
-                // CLEAR ANY PREVIOUS FIREBASE UID
                 preferenceHelper.clearUserData()
-
-                withContext(Dispatchers.Main) {
-                    redirectToHome(guestUser)
-                }
-
+                delayedRedirectToHome(guestUser)
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        this@AuthActivity,
-                        "ERROR SIGNING IN AS GUEST: ${e.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                hideLoading()
+                Toast.makeText(this@AuthActivity, "ERROR SIGNING IN AS GUEST: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun delayedRedirectToHome(user: UserEntity) {
+        handler.postDelayed({
+            hideLoading()
+            redirectToHome(user)
+        }, 3000)
     }
 
     private fun redirectToHome(user: UserEntity) {
@@ -254,8 +220,19 @@ class AuthActivity : AppCompatActivity() {
             putExtra("USER_EMAIL", user.email)
             putExtra("USER_LOGIN", user.login)
         }
-        startActivity(intent)
+        navigateTo(intent, R.anim.slide_in_right, R.anim.slide_out_left)
         finish()
+    }
+
+    fun showLoading() {
+        binding.loadingOverlay.visibility = View.VISIBLE
+        binding.lottieLoadingAnimation.playAnimation()
+        binding.progressBar.isVisible = false
+    }
+
+    fun hideLoading() {
+        binding.loadingOverlay.visibility = View.GONE
+        binding.lottieLoadingAnimation.cancelAnimation()
     }
 
     private fun showRegisterBottomSheet() {
@@ -265,7 +242,6 @@ class AuthActivity : AppCompatActivity() {
 
     private fun hideRegisterFragment() {
         supportFragmentManager.popBackStack()
-        // SHOW MAIN AUTH VIEWS AND HIDE FRAGMENT CONTAINER
         binding.btnSignInGoogle.isVisible = true
         binding.tvRegisterHere.isVisible = true
         binding.authContainer.isVisible = false
@@ -274,44 +250,44 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun signInWithGoogle() {
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
+        try {
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
 
-        val googleSignInClient = GoogleSignIn.getClient(this, gso)
-        val signInIntent = googleSignInClient.signInIntent
-        googleSignInLauncher.launch(signInIntent)
+            val googleSignInClient = GoogleSignIn.getClient(this, gso)
+            val signInIntent = googleSignInClient.signInIntent
+            val intent = Intent(signInIntent)
+            intent.putExtra("prompt", "select_account")
+            googleSignInLauncher.launch(intent)
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error configurando Google Sign-In: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun handleGoogleSignInResult(data: Intent?) {
         try {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             val account = task.getResult(ApiException::class.java)
-            account?.let {
-                firebaseAuthWithGoogle(it)
-            }
+            account?.let { firebaseAuthWithGoogle(it) }
         } catch (e: ApiException) {
             Toast.makeText(this, "GOOGLE SIGN-IN ERROR: ${e.statusCode}", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun firebaseAuthWithGoogle(account: com.google.android.gms.auth.api.signin.GoogleSignInAccount) {
+        showLoading()
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
 
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
-                    user?.let {
-                        saveUserToFirestoreAndLocal(it, account)
-                    }
+                    user?.let { saveUserToFirestoreAndLocal(it, account) }
                 } else {
-                    Toast.makeText(
-                        this,
-                        "AUTHENTICATION FAILED: ${task.exception?.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    hideLoading()
+                    Toast.makeText(this, "AUTHENTICATION FAILED: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }
@@ -335,20 +311,17 @@ class AuthActivity : AppCompatActivity() {
             .set(userEntity)
             .addOnSuccessListener {
                 preferenceHelper.saveFirebaseUid(firebaseUser.uid)
-
                 lifecycleScope.launch(Dispatchers.IO) {
-                    // DELETE ALL EXISTING USERS BEFORE INSERTING FIREBASE USER
                     db.userDao().deleteAllUsers()
                     db.userDao().insertUser(userEntity)
                 }
-
-                redirectToHome(userEntity)
+                delayedRedirectToHome(userEntity)
             }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "FIRESTORE SAVE ERROR: ${e.message}", Toast.LENGTH_SHORT).show()
+            .addOnFailureListener {
+                hideLoading()
+                Toast.makeText(this, "FIRESTORE SAVE ERROR: ${it.message}", Toast.LENGTH_SHORT).show()
             }
     }
-
 
     private fun enableDarkMode() {
         animateThemeChange(AppCompatDelegate.MODE_NIGHT_YES)
@@ -366,10 +339,7 @@ class AuthActivity : AppCompatActivity() {
                 AppCompatDelegate.setDefaultNightMode(mode)
                 delegate.applyDayNight()
                 binding.root.alpha = 0f
-                binding.root.animate()
-                    .alpha(1f)
-                    .setDuration(150)
-                    .start()
+                binding.root.animate().alpha(1f).setDuration(150).start()
             }.start()
     }
 }
