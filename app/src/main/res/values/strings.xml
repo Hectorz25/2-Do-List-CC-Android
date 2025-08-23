@@ -38,4 +38,45 @@
     <string name="text_user">Usuario</string>
     <string name="text_user_info">Mi Información</string>
     <string name="text_loading">Cargando...</string>
+    <string name="btn_text_cancel">Cancelar</string>
+    <string name="btn_text_save">Guardar</string>
+    <string name="btn_text_create">Crear</string>
+    <string name="text_loading_error">Error al cargar listas</string>
+    <string name="text_delete_list_title">Eliminar lista</string>
+    <string name="text_delete_list_message">¿Estás seguro de eliminar \'%s\'?</string>
+    <string name="btn_text_delete">Eliminar</string>
+    <string name="text_list_deleted">Lista eliminada</string>
+    <string name="text_delete_error">Error al eliminar</string>
+    <string name="text_enter_list_name">Ingresa nombre de lista</string>
+    <string name="text_add_one_task">Agrega al menos una tarea</string>
+    <string name="text_list_created">Lista creada</string>
+    <string name="text_create_error">Error al crear</string>
+    <string name="text_load_error">Error al cargar</string>
+    <string name="text_list_not_found">Lista no encontrada</string>
+    <string name="text_list_updated">Lista actualizada</string>
+    <string name="text_update_error">Error al actualizar</string>
+    <string name="text_logout_error">Error al cerrar sesión</string>
+
+    <!--No Lists-->
+    <string name="text_no_list_to_show">Hola %s! Que tal si agregamos cosas por hacer?</string>
+    <string name="text_description_add_list">Crear una lista nueva</string>
+    <string name="text_create_list">Crear lista</string>
+    <string name="text_new_list_title">Mi Nueva Lista</string>
+
+    <!--List-->
+    <string name="text_title_list">Titulo de Lista</string>
+    <string name="text_title_edit_list_task">Editar Lista</string>
+    <string name="text_description_delete_list">Eliminar Lista</string>
+    <string name="btn_text_add_task">Agregar Tarea</string>
+
+    <!--Tasks-->
+    <string name="text_description_add_task">Agregar Tarea</string>
+    <string name="text_description_delete_task">Eliminar Tarea</string>
+    <string name="hint_new_task">Agregar tarea</string>
+    <string name="task_count_format">%d/%d Tareas Completadas</string>
+    <string name="hint_task">Tarea</string>
+    <string name="text_tasks">Mis Tareas:</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

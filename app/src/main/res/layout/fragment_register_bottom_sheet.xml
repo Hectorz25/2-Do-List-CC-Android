@@ -29,7 +29,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_name_create_account"
-                android:inputType="textPersonName"/>
+                android:importantForAutofill="no"
+                android:inputType="textPersonName|textNoSuggestions"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -41,7 +42,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_last_name_create_account"
-                android:inputType="textPersonName"/>
+                android:importantForAutofill="no"
+                android:inputType="textPersonName|textNoSuggestions"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -53,7 +55,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_username_create_account"
-                android:inputType="text"/>
+                android:importantForAutofill="no"
+                android:inputType="text|textNoSuggestions"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -65,7 +68,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_email_create_account"
-                android:inputType="textEmailAddress"/>
+                android:importantForAutofill="no"
+                android:inputType="textEmailAddress|textNoSuggestions"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -78,7 +82,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_pass_create_account"
-                android:inputType="textPassword"/>
+                android:importantForAutofill="no"
+                android:inputType="textPassword|textNoSuggestions"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton

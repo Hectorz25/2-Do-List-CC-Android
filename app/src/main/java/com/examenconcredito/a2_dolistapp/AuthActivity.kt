@@ -138,7 +138,7 @@ class AuthActivity : AppCompatActivity() {
         val password = binding.etPassword.text.toString().trim()
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "PLEASE ENTER EMAIL AND PASSWORD", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Por favor ingrese correo y contraseña", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -159,7 +159,7 @@ class AuthActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         this,
-                        "SIGN IN FAILED: ${task.exception?.message}",
+                        "Fallo al iniciar sesión: ${task.exception?.message}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
