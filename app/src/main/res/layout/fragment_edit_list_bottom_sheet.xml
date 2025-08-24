@@ -10,42 +10,49 @@
         android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
         android:text="@string/text_title_edit_list_task"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginBottom="16dp" />
+        android:textStyle="bold" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilListName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="50">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etListName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/text_title_list"
-            android:maxLength="50" />
+            android:maxLength="50"
+            android:imeOptions="actionNext"
+            android:inputType="textCapWords|textNoSuggestions"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="@string/text_tasks"
         android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
+        android:textStyle="bold" />
 
     <!-- SCROLLVIEW FOR TASKS -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
         android:layout_weight="1"
-        android:layout_marginBottom="16dp">
+        android:contentDescription="@string/content_description_tasks_container">
 
         <LinearLayout
             android:id="@+id/containerTasks"
@@ -58,33 +65,33 @@
     <!-- ADD TASK BUTTON -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAddTask"
+        style="@style/Widget.Material3.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="@string/btn_text_add_task"
         android:drawableStart="@drawable/ic_add"
-        style="@style/Widget.Material3.Button.OutlinedButton" />
+        android:text="@string/btn_text_add_task" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="end">
+        android:gravity="end"
+        android:orientation="horizontal">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCancel"
+            style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="@string/btn_text_cancel"
-            style="@style/Widget.Material3.Button.OutlinedButton" />
+            android:text="@string/btn_text_cancel" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSave"
+            style="@style/Widget.Material3.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/btn_text_save"
-            style="@style/Widget.Material3.Button" />
+            android:text="@string/btn_text_save" />
 
     </LinearLayout>
 

@@ -2,6 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="success_green">#4CAF50</color>
+    <color name="success_green_dark">#388E3C</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="primary_color">#6200EE</color>
 
     <color name="splash_background">#FFFFFFFF</color>
     <color name="md_theme_primary">#006A69</color>

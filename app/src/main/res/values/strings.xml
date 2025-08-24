@@ -57,13 +57,26 @@
     <string name="text_update_error">Error al actualizar</string>
     <string name="text_logout_error">Error al cerrar sesión</string>
 
+    <!-- ACCESSIBILITY -->
+    <string name="content_description_create_list_screen">Pantalla para crear nueva lista de tareas</string>
+    <string name="content_description_list_title_input">Campo para ingresar el título de la lista</string>
+    <string name="content_description_tasks_container">Contenedor de tareas de la lista</string>
+
+    <!--FILTERS-->
+    <string name="filter_by">Filtrar por:</string>
+    <string name="filter_all_lists">Todas mis Listas</string>
+    <string name="filter_completed">Completadas</string>
+    <string name="filter_pending">Pendientes</string>
+    <string name="text_no_completed_lists">No hay listas completadas</string>
+    <string name="text_no_pending_lists">No hay listas pendientes</string>
+
     <!--No Lists-->
-    <string name="text_no_list_to_show">Hola %s! Que tal si agregamos cosas por hacer?</string>
+    <string name="text_no_list_to_show">¡Hola %s! ¿Que tal si agregamos cosas por hacer?</string>
     <string name="text_description_add_list">Crear una lista nueva</string>
-    <string name="text_create_list">Crear lista</string>
+    <string name="text_create_list">Crear Lista</string>
     <string name="text_new_list_title">Mi Nueva Lista</string>
 
-    <!--List-->
+    <!--Lists-->
     <string name="text_title_list">Titulo de Lista</string>
     <string name="text_title_edit_list_task">Editar Lista</string>
     <string name="text_description_delete_list">Eliminar Lista</string>
@@ -76,6 +89,8 @@
     <string name="task_count_format">%d/%d Tareas Completadas</string>
     <string name="hint_task">Tarea</string>
     <string name="text_tasks">Mis Tareas:</string>
+    <string name="hint_task_text">Escribe una tarea</string>
+    <string name="text_min_one_task">Debe haber al menos una tarea</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

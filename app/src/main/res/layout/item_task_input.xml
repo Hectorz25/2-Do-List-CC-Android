@@ -5,7 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_marginBottom="8dp">
+    android:layout_marginBottom="8dp"
+    android:gravity="center_vertical"
+    android:focusable="false"
+    android:focusableInTouchMode="false">
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etTask"
@@ -16,16 +19,19 @@
         android:hint="@string/hint_new_task"
         android:maxLines="1"
         android:minHeight="48dp"
-        tools:ignore="TextContrastCheck" />
+        android:imeOptions="actionNext"
+        android:inputType="textCapSentences|textNoSuggestions"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
 
-    <com.google.android.material.button.MaterialButton
+    <ImageButton
         android:id="@+id/btnRemoveTask"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/text_description_delete_task"
-        android:textColor="@android:color/white"
-        app:cornerRadius="20dp"
-        app:icon="@drawable/ic_delete"
+        android:src="@drawable/ic_delete"
+        app:tint="?attr/colorError"
         tools:ignore="TouchTargetSizeCheck" />
 
 </LinearLayout>

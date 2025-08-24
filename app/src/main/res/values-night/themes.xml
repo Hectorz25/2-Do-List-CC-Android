@@ -60,6 +60,8 @@
     <style name="BottomSheetDialogTheme" parent="Theme.Material3.DayNight.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/AppBottomSheetStyle</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
     <style name="AppBottomSheetStyle" parent="Widget.Material3.BottomSheet.Modal">

@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
     <TextView
         android:id="@+id/tvTitle"
@@ -29,7 +31,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/text_new_list_title"
-            android:maxLength="50" />
+            android:maxLength="50"
+            android:imeOptions="actionNext"
+            android:inputType="textCapWords|textNoSuggestions"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -41,13 +47,13 @@
         android:textStyle="bold"
         android:layout_marginBottom="8dp" />
 
-    <!-- SCROLLVIEW FOR TASKS -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/content_description_tasks_container">
 
         <LinearLayout
             android:id="@+id/containerTasks"
@@ -64,6 +70,8 @@
         android:layout_marginBottom="16dp"
         android:text="@string/btn_text_add_task"
         android:drawableStart="@drawable/ic_add"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         style="@style/Widget.Material3.Button.OutlinedButton" />
 
     <LinearLayout
@@ -78,6 +86,8 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:text="@string/btn_text_cancel"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             style="@style/Widget.Material3.Button.OutlinedButton" />
 
         <com.google.android.material.button.MaterialButton
@@ -85,6 +95,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_text_create"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             style="@style/Widget.Material3.Button" />
 
     </LinearLayout>

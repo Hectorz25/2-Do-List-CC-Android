@@ -1,14 +1,17 @@
 package com.examenconcredito.a2_dolistapp.ui.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.examenconcredito.a2_dolistapp.R
 import com.examenconcredito.a2_dolistapp.data.database.AppDatabase
 import com.examenconcredito.a2_dolistapp.data.entities.TaskListEntity
+import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +28,7 @@ class TaskListAdapter(
         private val tvListTitle: TextView = itemView.findViewById(R.id.tvListTitle)
         private val tvTaskCount: TextView = itemView.findViewById(R.id.tvTaskCount)
         private val btnDelete: ImageButton = itemView.findViewById(R.id.btnDeleteList)
+        private val cardView: MaterialCardView = itemView.findViewById(R.id.cardView)
 
         fun bind(taskList: TaskListEntity) {
             tvListTitle.text = taskList.title
@@ -41,16 +45,48 @@ class TaskListAdapter(
                             completedCount,
                             totalCount
                         )
+
+                        // APPLY GREEN COLOR IF ALL TASKS ARE COMPLETED AND THERE ARE TASKS
+                        val allTasksCompleted = totalCount > 0 && completedCount == totalCount
+                        updateCardAppearance(allTasksCompleted)
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
                         tvTaskCount.text = itemView.context.getString(R.string.task_count_format, 0, 0)
+                        // DEFAULT APPEARANCE IF ERROR OCCURS
+                        updateCardAppearance(false)
                     }
                 }
             }
 
             itemView.setOnClickListener { onItemClick(taskList) }
             btnDelete.setOnClickListener { onDeleteClick(taskList) }
+        }
+
+        private fun updateCardAppearance(allTasksCompleted: Boolean) {
+            if (allTasksCompleted) {
+                // GREEN SUCCESS STYLE
+                cardView.setCardBackgroundColor(
+                    ContextCompat.getColor(itemView.context, R.color.success_green)
+                )
+                tvListTitle.setTextColor(Color.WHITE)
+                tvTaskCount.setTextColor(Color.WHITE)
+                // OPTIONAL: CHANGE STROKE COLOR TO MATCH SUCCESS THEME
+                cardView.strokeColor = ContextCompat.getColor(itemView.context, R.color.success_green_dark)
+            } else {
+                // DEFAULT STYLE
+                cardView.setCardBackgroundColor(
+                    ContextCompat.getColor(itemView.context, R.color.card_background)
+                )
+                tvListTitle.setTextColor(
+                    ContextCompat.getColor(itemView.context, R.color.primary_text)
+                )
+                tvTaskCount.setTextColor(
+                    ContextCompat.getColor(itemView.context, R.color.secondary_text)
+                )
+                // RESTORE DEFAULT STROKE COLOR
+                cardView.strokeColor = ContextCompat.getColor(itemView.context, R.color.primary_color)
+            }
         }
     }
 

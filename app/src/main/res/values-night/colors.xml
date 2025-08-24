@@ -1,4 +1,10 @@
 <resources>
+    <color name="success_green">#388E3C</color>
+    <color name="success_green_dark">#1B5E20</color>
+    <color name="card_background">#1E1E1E</color>
+    <color name="primary_text">#FFFFFF</color>
+    <color name="secondary_text">#BDBDBD</color>
+    <color name="primary_color">#BB86FC</color>
     <color name="splash_background">#FF000000</color>
     <color name="md_theme_primary">#80D5D3</color>
     <color name="md_theme_onPrimary">#003736</color>
