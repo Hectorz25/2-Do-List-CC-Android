@@ -64,11 +64,11 @@
 
     <!--FILTERS-->
     <string name="filter_by">Filtrar por:</string>
-    <string name="filter_all_lists">Todas mis Listas</string>
+    <string name="filter_all_lists">Todas mis listas</string>
     <string name="filter_completed">Completadas</string>
     <string name="filter_pending">Pendientes</string>
-    <string name="text_no_completed_lists">No hay listas completadas</string>
-    <string name="text_no_pending_lists">No hay listas pendientes</string>
+    <string name="text_no_completed_lists">No tienes listas completadas</string>
+    <string name="text_no_pending_lists">No tienes listas pendientes</string>
 
     <!--No Lists-->
     <string name="text_no_list_to_show">¡Hola %s! ¿Que tal si agregamos cosas por hacer?</string>
@@ -81,6 +81,7 @@
     <string name="text_title_edit_list_task">Editar Lista</string>
     <string name="text_description_delete_list">Eliminar Lista</string>
     <string name="btn_text_add_task">Agregar Tarea</string>
+    <string name="text_list_need_task">Necesita al menos 1 tarea</string>
 
     <!--Tasks-->
     <string name="text_description_add_task">Agregar Tarea</string>
@@ -92,6 +93,4 @@
     <string name="hint_task_text">Escribe una tarea</string>
     <string name="text_min_one_task">Debe haber al menos una tarea</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

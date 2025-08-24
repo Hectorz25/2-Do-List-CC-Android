@@ -159,7 +159,7 @@ class AuthActivity : AppCompatActivity() {
                     delayedRedirectToHome(firestoreUser)
                 } else {
                     hideLoading()
-                    Toast.makeText(this@AuthActivity, "USER NOT FOUND IN DATABASE", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@AuthActivity, "No se encontro usuario en la base de datos", Toast.LENGTH_SHORT).show()
                     auth.signOut()
                 }
             } catch (e: Exception) {
@@ -196,10 +196,17 @@ class AuthActivity : AppCompatActivity() {
                 )
                 db.userDao().insertUser(guestUser)
                 preferenceHelper.clearUserData()
-                delayedRedirectToHome(guestUser)
+
+                // FIXED: SWITCH TO MAIN THREAD BEFORE CALLING UI METHODS
+                withContext(Dispatchers.Main) {
+                    delayedRedirectToHome(guestUser)
+                }
             } catch (e: Exception) {
-                hideLoading()
-                Toast.makeText(this@AuthActivity, "ERROR SIGNING IN AS GUEST: ${e.message}", Toast.LENGTH_SHORT).show()
+                // FIXED: SWITCH TO MAIN THREAD FOR UI UPDATES
+                withContext(Dispatchers.Main) {
+                    hideLoading()
+                    Toast.makeText(this@AuthActivity, "Error iniciando como Invitado: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -225,14 +232,31 @@ class AuthActivity : AppCompatActivity() {
     }
 
     fun showLoading() {
-        binding.loadingOverlay.visibility = View.VISIBLE
-        binding.lottieLoadingAnimation.playAnimation()
-        binding.progressBar.isVisible = false
+        runOnUiThread {
+            binding.loadingOverlay.visibility = View.VISIBLE
+            binding.lottieLoadingAnimation.playAnimation()
+            binding.progressBar.isVisible = false
+
+            // DISABLE BUTTONS DURING LOADING
+            binding.btnSignInEmail.isEnabled = false
+            binding.btnSignInGoogle.isEnabled = false
+            binding.btnSignInGuest.isEnabled = false
+            binding.tvRegisterHere.isEnabled = false
+        }
     }
 
-    fun hideLoading() {
-        binding.loadingOverlay.visibility = View.GONE
-        binding.lottieLoadingAnimation.cancelAnimation()
+    private fun hideLoading() {
+        runOnUiThread {
+            binding.loadingOverlay.visibility = View.GONE
+            binding.lottieLoadingAnimation.cancelAnimation()
+
+            // RE-ENABLE BUTTONS AFTER LOADING
+            binding.btnSignInEmail.isEnabled = true
+            binding.btnSignInGoogle.isEnabled = true
+            binding.btnSignInGuest.isEnabled = true
+            binding.tvRegisterHere.isEnabled = true
+            binding.progressBar.visibility = View.GONE
+        }
     }
 
     private fun showRegisterBottomSheet() {
@@ -272,7 +296,7 @@ class AuthActivity : AppCompatActivity() {
             val account = task.getResult(ApiException::class.java)
             account?.let { firebaseAuthWithGoogle(it) }
         } catch (e: ApiException) {
-            Toast.makeText(this, "GOOGLE SIGN-IN ERROR: ${e.statusCode}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Error iniciando sesión con Google: ${e.statusCode}", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -287,7 +311,7 @@ class AuthActivity : AppCompatActivity() {
                     user?.let { saveUserToFirestoreAndLocal(it, account) }
                 } else {
                     hideLoading()
-                    Toast.makeText(this, "AUTHENTICATION FAILED: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Fallo de autenticación: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
     }
@@ -314,12 +338,19 @@ class AuthActivity : AppCompatActivity() {
                 lifecycleScope.launch(Dispatchers.IO) {
                     db.userDao().deleteAllUsers()
                     db.userDao().insertUser(userEntity)
+
+                    // SWITCH TO MAIN THREAD
+                    withContext(Dispatchers.Main) {
+                        delayedRedirectToHome(userEntity)
+                    }
                 }
-                delayedRedirectToHome(userEntity)
             }
             .addOnFailureListener {
-                hideLoading()
-                Toast.makeText(this, "FIRESTORE SAVE ERROR: ${it.message}", Toast.LENGTH_SHORT).show()
+                // SWITCH TO MAIN THREAD
+                runOnUiThread {
+                    hideLoading()
+                    Toast.makeText(this, "Error al guardar en Firebase: ${it.message}", Toast.LENGTH_SHORT).show()
+                }
             }
     }
 

@@ -19,6 +19,7 @@ import com.examenconcredito.a2_dolistapp.R
 import com.examenconcredito.a2_dolistapp.data.database.AppDatabase
 import com.examenconcredito.a2_dolistapp.data.entities.TaskEntity
 import com.examenconcredito.a2_dolistapp.data.entities.TaskListEntity
+import com.examenconcredito.a2_dolistapp.data.repository.DatabaseRepository
 import com.examenconcredito.a2_dolistapp.databinding.FragmentEditListBottomSheetBinding
 import com.examenconcredito.a2_dolistapp.databinding.ItemTaskEditBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -507,7 +508,7 @@ class EditListBottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         if (!hasValidTasks()) {
-            Toast.makeText(requireContext(), "At least one valid task is required", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Debe de haber al menos 1 tarea", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -553,6 +554,10 @@ class EditListBottomSheetFragment : BottomSheetDialogFragment() {
                         db.taskDao().deleteTask(taskItem.task)
                     }
                 }
+
+                // NEW: UPDATE LIST COMPLETION STATUS USING REPOSITORY
+                val repository = DatabaseRepository(db)
+                repository.updateListCompletionStatus(listId)
 
                 if (auth.currentUser != null && !isGuestUser()) {
                     try {

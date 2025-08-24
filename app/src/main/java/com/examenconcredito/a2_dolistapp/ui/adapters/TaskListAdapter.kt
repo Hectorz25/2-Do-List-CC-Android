@@ -46,15 +46,15 @@ class TaskListAdapter(
                             totalCount
                         )
 
-                        // APPLY GREEN COLOR IF ALL TASKS ARE COMPLETED AND THERE ARE TASKS
-                        val allTasksCompleted = totalCount > 0 && completedCount == totalCount
+                        // CHANGED: USE THE STORED isCompleted FIELD INSTEAD OF CALCULATING
+                        val allTasksCompleted = taskList.isCompleted
                         updateCardAppearance(allTasksCompleted)
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
                         tvTaskCount.text = itemView.context.getString(R.string.task_count_format, 0, 0)
-                        // DEFAULT APPEARANCE IF ERROR OCCURS
-                        updateCardAppearance(false)
+                        // USE THE STORED isCompleted FIELD AS FALLBACK
+                        updateCardAppearance(taskList.isCompleted)
                     }
                 }
             }
@@ -65,7 +65,7 @@ class TaskListAdapter(
 
         private fun updateCardAppearance(allTasksCompleted: Boolean) {
             if (allTasksCompleted) {
-                // GREEN SUCCESS STYLE
+                // GREEN SUCCESS STYLE FOR COMPLETED LISTS
                 cardView.setCardBackgroundColor(
                     ContextCompat.getColor(itemView.context, R.color.success_green)
                 )
@@ -73,8 +73,9 @@ class TaskListAdapter(
                 tvTaskCount.setTextColor(Color.WHITE)
                 // OPTIONAL: CHANGE STROKE COLOR TO MATCH SUCCESS THEME
                 cardView.strokeColor = ContextCompat.getColor(itemView.context, R.color.success_green_dark)
+                cardView.strokeWidth = 2 // ADD VISIBLE STROKE FOR COMPLETED LISTS
             } else {
-                // DEFAULT STYLE
+                // DEFAULT STYLE FOR PENDING LISTS
                 cardView.setCardBackgroundColor(
                     ContextCompat.getColor(itemView.context, R.color.card_background)
                 )
@@ -86,6 +87,7 @@ class TaskListAdapter(
                 )
                 // RESTORE DEFAULT STROKE COLOR
                 cardView.strokeColor = ContextCompat.getColor(itemView.context, R.color.primary_color)
+                cardView.strokeWidth = 1 // DEFAULT STROKE WIDTH
             }
         }
     }

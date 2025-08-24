@@ -33,7 +33,32 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="10dp">
-            <!--VISIBLE WHEN NO LISTS-->
+
+            <!-- FILTER SPINNER - WILL BE VISIBLE ONLY WHEN LISTS EXIST -->
+            <LinearLayout
+                android:id="@+id/filterContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:visibility="gone"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/filter_by"
+                    android:textSize="14sp"
+                    android:layout_marginEnd="8dp"/>
+
+                <Spinner
+                    android:id="@+id/spinnerFilter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <!-- VISIBLE WHEN NO LISTS -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardWelcome"
                 android:layout_width="match_parent"
@@ -70,7 +95,8 @@
                         tools:ignore="RtlCompat" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-            <!--VISIBLE WHEN LISTS EXIST-->
+
+            <!-- VISIBLE WHEN LISTS EXIST -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewTaskLists"
                 android:layout_width="match_parent"
@@ -92,5 +118,4 @@
         android:src="@drawable/ic_add"
         app:backgroundTint="?attr/colorPrimary"
         app:tint="@android:color/white" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -13,7 +13,7 @@ import com.examenconcredito.a2_dolistapp.data.entities.UserEntity
 
 @Database(
     entities = [UserEntity::class, TaskListEntity::class, TaskEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

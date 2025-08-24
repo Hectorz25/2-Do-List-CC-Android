@@ -9,5 +9,6 @@ data class TaskListEntity(
     @PrimaryKey val id: String = UUID.randomUUID().toString(),
     val userId: String,
     val title: String,
+    val isCompleted: Boolean = false,
     val firebaseId: String? = null
 )

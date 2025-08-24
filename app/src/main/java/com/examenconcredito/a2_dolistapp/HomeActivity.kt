@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -42,9 +44,18 @@ class HomeActivity : AppCompatActivity(),
     private var userName: String = ""
     private var userEmail: String = ""
     private var userId: String = ""
+    private var isGuestUser: Boolean = false // NEW: TRACK GUEST STATUS
 
     private lateinit var taskListAdapter: TaskListAdapter
-    private val taskLists = mutableListOf<TaskListEntity>()
+    private val allTaskLists = mutableListOf<TaskListEntity>() // NEW: STORE ALL LISTS
+    private val filteredTaskLists = mutableListOf<TaskListEntity>() // NEW: STORE FILTERED LISTS
+
+    // NEW: ENUM FOR FILTER TYPES
+    private enum class FilterType {
+        ALL, COMPLETED, PENDING
+    }
+
+    private var currentFilter = FilterType.ALL // NEW: CURRENT FILTER STATE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +67,10 @@ class HomeActivity : AppCompatActivity(),
         userName = intent.getStringExtra("USER_NAME") ?: ""
         userEmail = intent.getStringExtra("USER_EMAIL") ?: ""
 
-        binding.tvWelcomeMessage.text = getString(R.string.text_no_list_to_show, userName)
+        // NEW: CHECK IF USER IS GUEST
+        isGuestUser = userId.contains("invitado", ignoreCase = true) || userEmail.isEmpty()
+        val welcomeName = if (isGuestUser) userName else userEmail
+        binding.tvWelcomeMessage.text = getString(R.string.text_no_list_to_show, welcomeName)
 
         setSupportActionBar(binding.topAppBar)
         supportActionBar?.setDisplayShowTitleEnabled(true)
@@ -67,6 +81,7 @@ class HomeActivity : AppCompatActivity(),
             insets
         }
 
+        setupFilterSpinner() // NEW: SETUP FILTER SPINNER
         setupRecyclerView()
         setupFloatingActionButton()
     }
@@ -76,9 +91,47 @@ class HomeActivity : AppCompatActivity(),
         loadTaskLists()
     }
 
+    // NEW: SETUP FILTER SPINNER
+    private fun setupFilterSpinner() {
+        // CREATE FILTER OPTIONS
+        val filterOptions = arrayOf(
+            getString(R.string.filter_all_lists),
+            getString(R.string.filter_completed),
+            getString(R.string.filter_pending)
+        )
+
+        // SETUP SPINNER ADAPTER
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_item,
+            filterOptions
+        ).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+
+        binding.spinnerFilter.adapter = adapter
+
+        // SETUP FILTER SELECTION LISTENER
+        binding.spinnerFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                when (position) {
+                    0 -> currentFilter = FilterType.ALL
+                    1 -> currentFilter = FilterType.COMPLETED
+                    2 -> currentFilter = FilterType.PENDING
+                }
+                applyFilter() // APPLY SELECTED FILTER
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                currentFilter = FilterType.ALL
+                applyFilter()
+            }
+        }
+    }
+
     private fun setupRecyclerView() {
         taskListAdapter = TaskListAdapter(
-            taskLists,
+            filteredTaskLists, // CHANGED: USE FILTERED LISTS INSTEAD OF ALL LISTS
             onItemClick = { editTaskList(it) },
             onDeleteClick = { deleteTaskList(it) },
             db = db
@@ -103,23 +156,68 @@ class HomeActivity : AppCompatActivity(),
             try {
                 val lists = db.taskListDao().getTaskListsByUser(userId)
                 withContext(Dispatchers.Main) {
-                    taskLists.clear()
-                    taskLists.addAll(lists)
-                    taskListAdapter.notifyDataSetChanged()
+                    allTaskLists.clear()
+                    allTaskLists.addAll(lists)
+                    applyFilter()
 
-                    if (taskLists.isNotEmpty()) {
-                        binding.cardWelcome.visibility = View.GONE
-                        binding.recyclerViewTaskLists.visibility = View.VISIBLE
+                    if (lists.isNotEmpty()) {
+                        binding.filterContainer.visibility = View.VISIBLE
                     } else {
-                        binding.cardWelcome.visibility = View.VISIBLE
-                        binding.recyclerViewTaskLists.visibility = View.GONE
+                        binding.filterContainer.visibility = View.GONE
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(this@HomeActivity, getString(R.string.text_loading_error), Toast.LENGTH_SHORT).show()
+                    binding.filterContainer.visibility = View.GONE
                 }
             }
+        }
+    }
+
+    private fun applyFilter() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val filteredLists = when (currentFilter) {
+                    FilterType.ALL -> db.taskListDao().getTaskListsByUser(userId)
+                    FilterType.COMPLETED -> db.taskListDao().getCompletedTaskLists(userId)
+                    FilterType.PENDING -> db.taskListDao().getPendingTaskLists(userId)
+                }
+
+                withContext(Dispatchers.Main) {
+                    filteredTaskLists.clear()
+                    filteredTaskLists.addAll(filteredLists)
+                    taskListAdapter.notifyDataSetChanged()
+                    updateUI()
+
+                    val shouldShowFilter = allTaskLists.isNotEmpty()
+                    binding.filterContainer.visibility = if (shouldShowFilter) View.VISIBLE else View.GONE
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@HomeActivity, "Error applying filter", Toast.LENGTH_SHORT).show()
+                    binding.filterContainer.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    private fun updateUI() {
+        if (filteredTaskLists.isNotEmpty()) {
+            binding.cardWelcome.visibility = View.GONE
+            binding.recyclerViewTaskLists.visibility = View.VISIBLE
+            binding.filterContainer.visibility = View.VISIBLE
+        } else {
+            binding.recyclerViewTaskLists.visibility = View.GONE
+            binding.filterContainer.visibility = View.GONE
+            binding.cardWelcome.visibility = View.VISIBLE
+
+            val message = when (currentFilter) {
+                FilterType.ALL -> getString(R.string.text_no_list_to_show, userName)
+                FilterType.COMPLETED -> getString(R.string.text_no_completed_lists)
+                FilterType.PENDING -> getString(R.string.text_no_pending_lists)
+            }
+            binding.tvWelcomeMessage.text = message
         }
     }
 
@@ -138,12 +236,12 @@ class HomeActivity : AppCompatActivity(),
                         db.taskDao().deleteAllTasksByList(taskList.id)
                         db.taskListDao().deleteTaskList(taskList)
 
-                        if (!userId.contains("invitado") && auth.currentUser != null) {
+                        if (!isGuestUser && auth.currentUser != null) { // CHANGED: USE isGuestUser FLAG
                             deleteFromFirebase(taskList)
                         }
 
                         withContext(Dispatchers.Main) {
-                            loadTaskLists()
+                            loadTaskLists() // RELOAD LISTS AFTER DELETION
                             Toast.makeText(this@HomeActivity, getString(R.string.text_list_deleted), Toast.LENGTH_SHORT).show()
                         }
                     } catch (e: Exception) {
@@ -173,6 +271,7 @@ class HomeActivity : AppCompatActivity(),
                 .delete()
                 .await()
         } catch (e: Exception) {
+            // SILENT FAIL FOR FIREBASE ERRORS
         }
     }
 
@@ -216,6 +315,7 @@ class HomeActivity : AppCompatActivity(),
                 .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
                 .invoke(mPopup, true)
         } catch (e: Exception) {
+            // IGNORE ERROR
         }
 
         popupMenu.setOnMenuItemClickListener { item ->
@@ -237,9 +337,7 @@ class HomeActivity : AppCompatActivity(),
     private fun performLogout() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                val isGuestUser = userEmail.endsWith("@invitado.com")
-
-                if (isGuestUser) {
+                if (isGuestUser) { // CHANGED: USE isGuestUser FLAG
                     db.userDao().updateLoginStatus(userId, false)
                 } else {
                     auth.signOut()
