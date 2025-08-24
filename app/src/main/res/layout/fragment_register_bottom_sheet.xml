@@ -101,7 +101,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/btn_text_create_account"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/md_theme_primary"
+                android:textColor="@android:color/white"/>
 
             <!-- ALREADY REGISTER -->
             <LinearLayout

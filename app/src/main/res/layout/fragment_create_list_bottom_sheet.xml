@@ -95,12 +95,14 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCreate"
+            style="@style/Widget.Material3.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_text_create"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            style="@style/Widget.Material3.Button" />
+            android:backgroundTint="@color/md_theme_primary"
+            android:textColor="@android:color/white"/>
 
     </LinearLayout>
 
