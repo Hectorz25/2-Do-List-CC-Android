@@ -54,17 +54,17 @@ class ProfileActivity : AppCompatActivity() {
         val userLastName = intent.getStringExtra("USER_LAST_NAME") ?: "N/A"
         val userUsername = intent.getStringExtra("USER_USERNAME") ?: "N/A"
         val userEmail = intent.getStringExtra("USER_EMAIL") ?: "N/A"
-        val userLogin = intent.getBooleanExtra("USER_LOGIN", false)
+        //val userLogin = intent.getBooleanExtra("USER_LOGIN", false)
 
         // SET USER DATA
-        binding.tvUserId.text = "ID: $userId"
-        binding.tvUserName.text = "Name: $userName"
-        binding.tvUserLastName.text = "Last Name: $userLastName"
-        binding.tvUserUsername.text = "Username: $userUsername"
-        binding.tvUserEmail.text = "Email: $userEmail"
-        binding.tvUserLogin.text = "Login Status: $userLogin"
+        binding.tvUserId.text = getString(R.string.text_label_id,userId)
+        binding.tvUserName.text = getString(R.string.text_label_name,userName)
+        binding.tvUserLastName.text = getString(R.string.text_label_lastname,userLastName)
+        binding.tvUserUsername.text =  getString(R.string.text_label_username, userUsername)
+        binding.tvUserEmail.text = getString(R.string.text_label_email, userEmail)
+        //binding.tvUserLogin.text = getString(R.string.text_label_login_status, userLogin)
 
-        // THEME SWITCH WITH RECURSION PROTECTION
+        // THEME SWITCH
         val swDarkMode = findViewById<com.google.android.material.switchmaterial.SwitchMaterial>(R.id.swThemeSelector)
         swDarkMode.isChecked = preferenceHelper.isDarkModeEnabled()
 
@@ -79,7 +79,7 @@ class ProfileActivity : AppCompatActivity() {
             }
             preferenceHelper.setDarkModeEnabled(isSelected)
             Toast.makeText(this,
-                if (isSelected) "DARK MODE ENABLED" else "LIGHT MODE ENABLED",
+                if (isSelected) getString(R.string.text_darkmode_enabled) else getString(R.string.text_lightmode_enabled),
                 Toast.LENGTH_SHORT).show()
             swDarkMode.postDelayed({
                 isThemeChangeInProgress = false
@@ -96,7 +96,6 @@ class ProfileActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_user -> {
-                // SHOW POPUP MENU
                 showUserOptionsPopup()
                 true
             }
@@ -116,11 +115,11 @@ class ProfileActivity : AppCompatActivity() {
                 .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
                 .invoke(mPopup, true)
         } catch (e: Exception) {
+           println(getString(R.string.text_debug_exception_occurred, e.message?: ""))
         }
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.popup_profile -> {
-                    Toast.makeText(this, "ALREADY IN PROFILE", Toast.LENGTH_SHORT).show()
                     true
                 }
                 R.id.popup_logout -> {
@@ -141,13 +140,13 @@ class ProfileActivity : AppCompatActivity() {
                 val isGuestUser = userEmail.endsWith("@invitado.com")
 
                 if (isGuestUser) {
-                    // FOR GUEST: UPDATE LOGIN STATUS ONLY
                     db.userDao().updateLoginStatus(userId, false)
                 } else {
                     // FOR FIREBASE: SIGN OUT AND CLEAN UP
                     auth.signOut()
                     preferenceHelper.clearUserData()
-                    db.userDao().deleteAllUsers() // DELETE ALL USERS
+                    // DELETE ALL USERS
+                    db.userDao().deleteAllUsers()
                 }
 
                 withContext(Dispatchers.Main) {
@@ -159,7 +158,7 @@ class ProfileActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@ProfileActivity, "LOGOUT ERROR: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ProfileActivity, getString(R.string.text_debug_logout_error, e.message?: ""), Toast.LENGTH_SHORT).show()
                 }
             }
         }

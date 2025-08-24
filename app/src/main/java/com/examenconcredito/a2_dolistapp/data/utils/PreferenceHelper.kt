@@ -29,7 +29,7 @@ class PreferenceHelper(context: Context) {
         return getString("firebase_uid", "")
     }
     fun clearUserData() {
-        // DELETE FIREBASE UID, KEEP DEVICE ID
+    // DELETE FIREBASE UID, KEEP DEVICE ID
         saveString("firebase_uid", "")
     }
     // SAVE OTHER PREFS

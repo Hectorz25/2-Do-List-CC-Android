@@ -1,6 +1,5 @@
 package com.examenconcredito.a2_dolistapp
 
-import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -18,7 +17,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -30,12 +28,12 @@ class SplashScreenActivity : AppCompatActivity() {
     private val firestore by lazy { Firebase.firestore }
     private val db by lazy { AppDatabase.getDatabase(this) }
     private val preferenceHelper by lazy { PreferenceHelper(this) }
-    private val persistentDeviceId by lazy { preferenceHelper.getUniqueDeviceId() }
+
     private val SPLASH_DELAY = 3000L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
-            // APPLY THEME BEFORE SUPER
+            // APPLY THEME
             preferenceHelper.applySavedTheme()
             super.onCreate(savedInstanceState)
 
@@ -50,7 +48,7 @@ class SplashScreenActivity : AppCompatActivity() {
             }
             checkUserSession()
         } catch (e: Exception) {
-            println("DEBUG: FATAL ERROR IN ONCREATE: ${e.message}")
+            println(getString(R.string.text_debug_fatal_error_oncreate, e.message?: ""))
             e.printStackTrace()
             redirectToAuth()
         }
@@ -74,7 +72,7 @@ class SplashScreenActivity : AppCompatActivity() {
                         }
                         redirectToHome(firestoreUser)
                     } else {
-                        // CREATE NEW USER IN FIRESTORE IF NOT EXISTS (FOR EMAIL/PASSWORD USERS)
+                        // CREATE NEW USER IN FIRESTORE (FOR EMAIL/PASSWORD USERS)
                         createNewFirebaseUser(currentFirebaseUser)
                     }
                     return@launch
@@ -84,7 +82,7 @@ class SplashScreenActivity : AppCompatActivity() {
                 checkLocalUser()
 
             } catch (e: Exception) {
-                println("DEBUG: EXCEPTION OCCURRED: ${e.message}")
+                println(getString(R.string.text_debug_exception_occurred, e.message?: ""))
                 redirectToAuth()
             }
         }
@@ -92,7 +90,8 @@ class SplashScreenActivity : AppCompatActivity() {
 
     private suspend fun checkLocalUser() {
         val localUser = withContext(Dispatchers.IO) {
-            db.userDao().getFirstUser() // GET ANY EXISTING USER
+            // GET ANY EXISTING USER
+            db.userDao().getFirstUser()
         }
 
         if (localUser != null && localUser.login) {

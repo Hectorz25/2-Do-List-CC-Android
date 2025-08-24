@@ -24,6 +24,7 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="24dp"/>
 
+            <!-- NAME FIELD -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,6 +38,7 @@
                     android:inputType="textPersonName|textNoSuggestions"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- LAST NAME FIELD-->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,6 +52,7 @@
                     android:inputType="textPersonName|textNoSuggestions"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- USERNAME FIELD -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,6 +66,7 @@
                     android:inputType="text|textNoSuggestions"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- EMAIL -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,6 +80,7 @@
                     android:inputType="textEmailAddress|textNoSuggestions"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- PASSWORD FIELD -->
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,6 +95,7 @@
                     android:inputType="textPassword|textNoSuggestions"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- REGISTER BUTTON -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnRegister"
                 android:layout_width="match_parent"
@@ -97,6 +103,7 @@
                 android:text="@string/btn_text_create_account"
                 android:layout_marginBottom="16dp" />
 
+            <!-- ALREADY REGISTER -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

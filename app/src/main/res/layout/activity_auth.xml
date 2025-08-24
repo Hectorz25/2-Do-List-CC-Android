@@ -109,7 +109,7 @@
                 tools:ignore="RtlSymmetry,TouchTargetSizeCheck" />
         </LinearLayout>
 
-        <!-- DIVIDER WITH "OR" TEXT -->
+        <!-- DIVIDER -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
                 android:layout_marginStart="8dp" />
         </LinearLayout>
 
-        <!-- GOOGLE AND GUEST SIGN IN BUTTONS -->
+        <!-- GOOGLE AND GUEST BUTTONS -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -144,7 +144,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <!-- GOOGLE BUTTON (ROUND) -->
+            <!-- GOOGLE -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSignInGoogle"
                 android:layout_width="56dp"
@@ -158,7 +158,7 @@
                 app:iconTint="@android:color/white"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.App.LargeComponent.Round" />
 
-            <!-- GUEST BUTTON -->
+            <!-- GUEST -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSignInGuest"
                 android:layout_width="wrap_content"
@@ -186,7 +186,7 @@
             android:layout_marginBottom="40dp"
             tools:ignore="TextContrastCheck" />
 
-        <!-- FRAGMENT CONTAINER (HIDDEN BY DEFAULT) -->
+        <!-- FRAGMENT CONTAINER -->
         <FrameLayout
             android:id="@+id/auth_container"
             android:layout_width="match_parent"

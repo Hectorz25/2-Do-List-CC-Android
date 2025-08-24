@@ -10,18 +10,39 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorSurface"
-        android:elevation="0dp">
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorSurface"
+            android:background="?attr/colorPrimary"
             app:menu="@menu/menu_home"
-            app:titleTextColor="?attr/colorOnSurface" />
+            app:titleTextColor="@android:color/transparent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
+
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -34,7 +55,7 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <!-- FILTER SPINNER - WILL BE VISIBLE ONLY WHEN LISTS EXIST -->
+            <!-- FILTER SPINNER - VISIBLE ONLY WHEN LISTS EXIST -->
             <LinearLayout
                 android:id="@+id/filterContainer"
                 android:layout_width="match_parent"

@@ -59,8 +59,6 @@ class RegisterBottomSheetFragment : BottomSheetDialogFragment() {
 
         setupClickListeners()
         setupBottomSheetBehavior()
-
-        // Forzar que el teclado se muestre al abrir el fragment
         binding.etName.requestFocus()
         showKeyboard()
     }
@@ -88,9 +86,7 @@ class RegisterBottomSheetFragment : BottomSheetDialogFragment() {
                         behavior.state = BottomSheetBehavior.STATE_EXPANDED
                     }
                 }
-
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                    // No implementation needed
                 }
             })
         }
@@ -137,27 +133,27 @@ class RegisterBottomSheetFragment : BottomSheetDialogFragment() {
         var isValid = true
 
         if (name.isEmpty()) {
-            binding.etName.error = "El nombre es requerido"
+            binding.etName.error = getString(R.string.text_name_required)
             isValid = false
         }
 
         if (lastName.isEmpty()) {
-            binding.etLastName.error = "El apellido es requerido"
+            binding.etLastName.error = getString(R.string.text_lastname_required)
             isValid = false
         }
 
         if (username.isEmpty()) {
-            binding.etUsername.error = "El nombre de usuario es requerido"
+            binding.etUsername.error = getString(R.string.text_username_required)
             isValid = false
         }
 
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.etEmail.error = "Correo electrónico inválido"
+            binding.etEmail.error = getString(R.string.text_email_invalid)
             isValid = false
         }
 
         if (password.length < 6) {
-            binding.etPassword.error = "La contraseña debe tener al menos 6 caracteres"
+            binding.etPassword.error = getString(R.string.text_min_pass_required)
             isValid = false
         }
 
@@ -183,7 +179,7 @@ class RegisterBottomSheetFragment : BottomSheetDialogFragment() {
                     binding.btnRegister.isEnabled = true
                     Toast.makeText(
                         requireContext(),
-                        "Error al registrar: ${task.exception?.message}",
+                        getString(R.string.text_register_error, task.exception?.message ?: ""),
                         Toast.LENGTH_SHORT
                     ).show()
                 }

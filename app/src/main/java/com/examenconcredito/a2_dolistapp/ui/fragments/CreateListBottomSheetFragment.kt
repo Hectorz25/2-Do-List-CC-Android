@@ -149,16 +149,13 @@ class CreateListBottomSheetFragment : BottomSheetDialogFragment() {
             state = BottomSheetBehavior.STATE_EXPANDED
             skipCollapsed = true
             isFitToContents = false
-
             addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
                     if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
                         state = BottomSheetBehavior.STATE_EXPANDED
                     }
                 }
-
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                    // NO ACTION NEEDED
                 }
             })
         }
@@ -175,8 +172,6 @@ class CreateListBottomSheetFragment : BottomSheetDialogFragment() {
 
                 binding.root.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
                 val contentHeight = binding.root.measuredHeight
-
-                // USE 90% OF SCREEN HEIGHT WHEN NO KEYBOARD IS VISIBLE
                 val desiredHeight = min(contentHeight, (screenHeight * 0.9).toInt())
 
                 val layoutParams = it.layoutParams
@@ -245,7 +240,7 @@ class CreateListBottomSheetFragment : BottomSheetDialogFragment() {
         } else if (hasValidTasks()) {
             addTaskInput(true)
         } else {
-            Toast.makeText(requireContext(), "Complete existing tasks first", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.text_complete_current_tasks_first), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -273,8 +268,6 @@ class CreateListBottomSheetFragment : BottomSheetDialogFragment() {
         try {
             val activity = requireActivity()
             val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
-            // HIDE KEYBOARD USING WINDOW TOKEN FOR BETTER RELIABILITY
             val windowToken = dialog?.window?.decorView?.windowToken
             if (windowToken != null) {
                 imm.hideSoftInputFromWindow(windowToken, 0)
@@ -357,7 +350,7 @@ class CreateListBottomSheetFragment : BottomSheetDialogFragment() {
                 taskBinding.etTask.setText("")
                 taskBinding.etTask.requestFocus()
                 showKeyboard(taskBinding.etTask)
-                Toast.makeText(requireContext(), getString(R.string.text_min_one_task), Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.text_list_need_task), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -464,7 +457,6 @@ class CreateListBottomSheetFragment : BottomSheetDialogFragment() {
                     try {
                         syncWithFirebase(taskList, taskEntities)
                     } catch (e: Exception) {
-                        // SILENTLY FAIL FOR FIREBASE SYNC ERRORS
                     }
                 }
 

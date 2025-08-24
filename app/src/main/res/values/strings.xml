@@ -30,8 +30,19 @@
     <string name="hint_pass_create_account">Contraseña</string>
     <string name="btn_text_create_account">Registrarse</string>
     <string name="btn_already_created_account_login">Inicia sesión aquí</string>
+    <string name="text_name_required">El nombre es requerido</string>
+    <string name="text_lastname_required">El apellido es requerido</string>
+    <string name="text_username_required">El nombre de usuario es requerido</string>
+    <string name="text_email_invalid">Correo electrónico invalido</string>
+    <string name="text_min_pass_required">La contraseña debe tener minimo 6 caracteres</string>
 
     <!--General-->
+    <string name="text_label_id">Id: %1$s</string>
+    <string name="text_label_name">Nombre: %1$s</string>
+    <string name="text_label_lastname">Apellidos: %1$s</string>
+    <string name="text_label_username">Usuario: %1$s</string>
+    <string name="text_label_email">Correo Electrónico: %1$s</string>
+    <string name="text_label_login_status">Estado de la sesión</string>
     <string name="text_logout">Cerrar sesión</string>
     <string name="text_profile">Perfil</string>
     <string name="text_swTheme">Cambiar tema</string>
@@ -41,21 +52,19 @@
     <string name="btn_text_cancel">Cancelar</string>
     <string name="btn_text_save">Guardar</string>
     <string name="btn_text_create">Crear</string>
-    <string name="text_loading_error">Error al cargar listas</string>
     <string name="text_delete_list_title">Eliminar lista</string>
     <string name="text_delete_list_message">¿Estás seguro de eliminar \'%s\'?</string>
     <string name="btn_text_delete">Eliminar</string>
     <string name="text_list_deleted">Lista eliminada</string>
-    <string name="text_delete_error">Error al eliminar</string>
     <string name="text_enter_list_name">Ingresa nombre de lista</string>
     <string name="text_add_one_task">Agrega al menos una tarea</string>
     <string name="text_list_created">Lista creada</string>
-    <string name="text_create_error">Error al crear</string>
-    <string name="text_load_error">Error al cargar</string>
     <string name="text_list_not_found">Lista no encontrada</string>
     <string name="text_list_updated">Lista actualizada</string>
-    <string name="text_update_error">Error al actualizar</string>
-    <string name="text_logout_error">Error al cerrar sesión</string>
+    <string name="text_app_themes">Modo Claro/Oscuro</string>
+    <string name="text_darkmode_enabled">Modo oscuro activado</string>
+    <string name="text_lightmode_enabled">Modo claro activado</string>
+    <string name="text_fill_auth_fields">Ingrese correo y contreseña</string>
 
     <!-- ACCESSIBILITY -->
     <string name="content_description_create_list_screen">Pantalla para crear nueva lista de tareas</string>
@@ -91,6 +100,29 @@
     <string name="hint_task">Tarea</string>
     <string name="text_tasks">Mis Tareas:</string>
     <string name="hint_task_text">Escribe una tarea</string>
-    <string name="text_min_one_task">Debe haber al menos una tarea</string>
+    <string name="text_complete_current_tasks_first">Completa primero tus tareas</string>
 
+    <!--NO FOUND DATA-->
+    <string name="text_nofound_user">No se encontró usuario en la base de datos</string>
+
+    <!--ERRORS-->
+    <string name="text_register_error">Error al registrar: %1$s</string>
+    <string name="text_loading_error">Error al cargar listas</string>
+    <string name="text_delete_error">Error al eliminar</string>
+    <string name="text_create_error">Error al crear</string>
+    <string name="text_load_error">Error al cargar</string>
+    <string name="text_update_error">Error al actualizar</string>
+    <string name="text_error_email_signin">Error al iniciar sesióm %1$s</string>
+    <string name="text_logout_error">Error al cerrar sesión</string>
+    <string name="text_debug_exception_occurred">Debug: Ocurrió una exceptión: %1$s</string>
+    <string name="text_debug_fatal_error_oncreate">Debug: Error fatal en OnCreate: %1$s</string>
+    <string name="text_debug_logout_error">Debug: Logout error: %1$s</string>
+    <string name="text_debug_firebase_exception_occurred">Debug: Excepción en Firebase: %1$s</string>
+    <string name="text_debug_firebase_saving">Error al guardar en Firebase: %1$s</string>
+    <string name="text_filter_error">Error al filtrar</string>
+    <string name="text_error_google_auth">Fallo de autenticación con Google: %1$s</string>
+    <string name="text_error_google_signin">Error al iniciar sesión con Google: %1$s</string>
+    <string name="text_error_config_google_signin">Error configurando inicio de sesión con Google: %1$s</string>
+    <string name="text_error_guest_signin">Error iniciando como invitado: %1$s</string>
+    <string name="text_error">Error: %1$s</string>
 </resources>

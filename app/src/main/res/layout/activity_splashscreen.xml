@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     tools:context=".SplashScreenActivity">
 
+<!-- APP NAME -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/materialTV_My"
         android:layout_width="wrap_content"
@@ -46,6 +47,7 @@
         app:layout_constraintStart_toEndOf="@+id/materialTV_2DO"
         app:layout_constraintTop_toTopOf="parent" />
 
+<!-- LOTTIE MAIN ANIMATION -->
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottieSplashScreenAnimation"
         android:layout_width="250dp"
@@ -59,6 +61,7 @@
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/splashscreenanimation" />
 
+    <!-- LOTTIE ANIMATION LOADING CIRCLE -->
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottieLoadingCircleSplashScreen"
         android:layout_width="50dp"
@@ -74,6 +77,7 @@
         app:lottie_speed="1.5"
         tools:ignore="ImageContrastCheck" />
 
+    <!-- DEV NAME -->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/materialTextView"
         android:layout_width="300dp"

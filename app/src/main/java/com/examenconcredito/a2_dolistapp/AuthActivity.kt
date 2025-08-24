@@ -127,7 +127,7 @@ class AuthActivity : AppCompatActivity() {
         val password = binding.etPassword.text.toString().trim()
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Por favor ingrese correo y contraseña", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.text_fill_auth_fields), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -142,7 +142,7 @@ class AuthActivity : AppCompatActivity() {
                     user?.let { checkFirestoreUserAndRedirect(it.uid) }
                 } else {
                     hideLoading()
-                    Toast.makeText(this, "Fallo al iniciar sesión: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.text_error_email_signin, task.exception?.message?: ""), Toast.LENGTH_SHORT).show()
                 }
             }
     }
@@ -164,7 +164,7 @@ class AuthActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 hideLoading()
-                Toast.makeText(this@AuthActivity, "ERROR: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@AuthActivity, getString(R.string.text_error, e.message?: ""), Toast.LENGTH_SHORT).show()
                 auth.signOut()
             }
         }
@@ -197,15 +197,15 @@ class AuthActivity : AppCompatActivity() {
                 db.userDao().insertUser(guestUser)
                 preferenceHelper.clearUserData()
 
-                // FIXED: SWITCH TO MAIN THREAD BEFORE CALLING UI METHODS
+                // SWITCH TO MAIN THREAD BEFORE CALLING UI METHODS
                 withContext(Dispatchers.Main) {
                     delayedRedirectToHome(guestUser)
                 }
             } catch (e: Exception) {
-                // FIXED: SWITCH TO MAIN THREAD FOR UI UPDATES
+                // SWITCH TO MAIN THREAD FOR UI UPDATES
                 withContext(Dispatchers.Main) {
                     hideLoading()
-                    Toast.makeText(this@AuthActivity, "Error iniciando como Invitado: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@AuthActivity, getString(R.string.text_error_guest_signin, e.message?: ""), Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -237,7 +237,6 @@ class AuthActivity : AppCompatActivity() {
             binding.lottieLoadingAnimation.playAnimation()
             binding.progressBar.isVisible = false
 
-            // DISABLE BUTTONS DURING LOADING
             binding.btnSignInEmail.isEnabled = false
             binding.btnSignInGoogle.isEnabled = false
             binding.btnSignInGuest.isEnabled = false
@@ -250,7 +249,6 @@ class AuthActivity : AppCompatActivity() {
             binding.loadingOverlay.visibility = View.GONE
             binding.lottieLoadingAnimation.cancelAnimation()
 
-            // RE-ENABLE BUTTONS AFTER LOADING
             binding.btnSignInEmail.isEnabled = true
             binding.btnSignInGoogle.isEnabled = true
             binding.btnSignInGuest.isEnabled = true
@@ -286,7 +284,7 @@ class AuthActivity : AppCompatActivity() {
             intent.putExtra("prompt", "select_account")
             googleSignInLauncher.launch(intent)
         } catch (e: Exception) {
-            Toast.makeText(this, "Error configurando Google Sign-In: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.text_error_config_google_signin, e.message?: ""), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -296,7 +294,7 @@ class AuthActivity : AppCompatActivity() {
             val account = task.getResult(ApiException::class.java)
             account?.let { firebaseAuthWithGoogle(it) }
         } catch (e: ApiException) {
-            Toast.makeText(this, "Error iniciando sesión con Google: ${e.statusCode}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.text_error_google_signin, e.statusCode.toString()), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -311,7 +309,7 @@ class AuthActivity : AppCompatActivity() {
                     user?.let { saveUserToFirestoreAndLocal(it, account) }
                 } else {
                     hideLoading()
-                    Toast.makeText(this, "Fallo de autenticación: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.text_error_google_auth, task.exception?.message?: ""), Toast.LENGTH_SHORT).show()
                 }
             }
     }
@@ -349,7 +347,7 @@ class AuthActivity : AppCompatActivity() {
                 // SWITCH TO MAIN THREAD
                 runOnUiThread {
                     hideLoading()
-                    Toast.makeText(this, "Error al guardar en Firebase: ${it.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.text_debug_firebase_saving, it.message?:""), Toast.LENGTH_SHORT).show()
                 }
             }
     }

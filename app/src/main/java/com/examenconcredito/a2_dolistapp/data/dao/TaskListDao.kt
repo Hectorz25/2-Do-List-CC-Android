@@ -23,7 +23,6 @@ interface TaskListDao {
     @Query("DELETE FROM task_lists WHERE userId = :userId")
     suspend fun deleteAllTaskListsByUser(userId: String)
 
-    // NEW: GET COMPLETED TASK LISTS FOR A USER
     @Query("""
         SELECT tl.* FROM task_lists tl
         WHERE tl.userId = :userId 
@@ -35,7 +34,6 @@ interface TaskListDao {
     """)
     suspend fun getCompletedTaskLists(userId: String): List<TaskListEntity>
 
-    // NEW: GET PENDING TASK LISTS FOR A USER
     @Query("""
         SELECT tl.* FROM task_lists tl
         WHERE tl.userId = :userId 
@@ -54,7 +52,6 @@ interface TaskListDao {
     """)
     suspend fun getPendingTaskLists(userId: String): List<TaskListEntity>
 
-    // NEW: ADD THIS CRITICAL METHOD - UPDATE COMPLETION STATUS
     @Query("UPDATE task_lists SET isCompleted = :isCompleted WHERE id = :listId")
     suspend fun updateListCompletionStatus(listId: String, isCompleted: Boolean)
 }

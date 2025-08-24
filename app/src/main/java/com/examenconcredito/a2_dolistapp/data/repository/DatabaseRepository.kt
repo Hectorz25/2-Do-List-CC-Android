@@ -6,7 +6,6 @@ import kotlinx.coroutines.withContext
 
 class DatabaseRepository(private val db: AppDatabase) {
 
-    // NEW: UPDATE LIST COMPLETION STATUS
     suspend fun updateListCompletionStatus(listId: String) {
         withContext(Dispatchers.IO) {
             val completedTasks = db.taskDao().getCompletedTasksCount(listId)
@@ -18,7 +17,6 @@ class DatabaseRepository(private val db: AppDatabase) {
         }
     }
 
-    // NEW: UPDATE ALL LISTS COMPLETION STATUS FOR A USER
     suspend fun updateAllListsCompletionStatus(userId: String) {
         withContext(Dispatchers.IO) {
             val lists = db.taskListDao().getTaskListsByUser(userId)

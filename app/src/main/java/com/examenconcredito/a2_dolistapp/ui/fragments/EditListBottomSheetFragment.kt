@@ -165,7 +165,7 @@ class EditListBottomSheetFragment : BottomSheetDialogFragment() {
                 }
 
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                    // NO ACTION NEEDED
+
                 }
             })
         }
@@ -183,7 +183,6 @@ class EditListBottomSheetFragment : BottomSheetDialogFragment() {
                 binding.root.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
                 val contentHeight = binding.root.measuredHeight
 
-                // USE 90% OF SCREEN HEIGHT WHEN NO KEYBOARD IS VISIBLE
                 val desiredHeight = min(contentHeight, (screenHeight * 0.9).toInt())
 
                 val layoutParams = it.layoutParams
@@ -252,7 +251,7 @@ class EditListBottomSheetFragment : BottomSheetDialogFragment() {
         } else if (hasValidTasks()) {
             addNewTaskInput(true)
         } else {
-            Toast.makeText(requireContext(), "Complete existing tasks first", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.text_complete_current_tasks_first), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -281,7 +280,6 @@ class EditListBottomSheetFragment : BottomSheetDialogFragment() {
             val activity = requireActivity()
             val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-            // HIDE KEYBOARD USING WINDOW TOKEN FOR BETTER RELIABILITY
             val windowToken = dialog?.window?.decorView?.windowToken
             if (windowToken != null) {
                 imm.hideSoftInputFromWindow(windowToken, 0)
@@ -402,7 +400,7 @@ class EditListBottomSheetFragment : BottomSheetDialogFragment() {
                 }
                 removeTaskInput(taskBinding)
             } else {
-                Toast.makeText(requireContext(), "At least one valid task is required", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.text_list_need_task), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -491,7 +489,7 @@ class EditListBottomSheetFragment : BottomSheetDialogFragment() {
                 showKeyboard(taskToFocus)
             }
         } else {
-            Toast.makeText(requireContext(), getString(R.string.text_min_one_task), Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.text_list_need_task), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -508,7 +506,7 @@ class EditListBottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         if (!hasValidTasks()) {
-            Toast.makeText(requireContext(), "Debe de haber al menos 1 tarea", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.text_list_need_task), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -555,7 +553,7 @@ class EditListBottomSheetFragment : BottomSheetDialogFragment() {
                     }
                 }
 
-                // NEW: UPDATE LIST COMPLETION STATUS USING REPOSITORY
+                // UPDATE LIST COMPLETION STATUS
                 val repository = DatabaseRepository(db)
                 repository.updateListCompletionStatus(listId)
 
@@ -563,7 +561,6 @@ class EditListBottomSheetFragment : BottomSheetDialogFragment() {
                     try {
                         syncWithFirebase(updatedList)
                     } catch (e: Exception) {
-                        // SILENTLY FAIL FOR FIREBASE SYNC ERRORS
                     }
                 }
 

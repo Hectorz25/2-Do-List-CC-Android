@@ -44,18 +44,16 @@ class HomeActivity : AppCompatActivity(),
     private var userName: String = ""
     private var userEmail: String = ""
     private var userId: String = ""
-    private var isGuestUser: Boolean = false // NEW: TRACK GUEST STATUS
-
+    private var isGuestUser: Boolean = false
     private lateinit var taskListAdapter: TaskListAdapter
-    private val allTaskLists = mutableListOf<TaskListEntity>() // NEW: STORE ALL LISTS
-    private val filteredTaskLists = mutableListOf<TaskListEntity>() // NEW: STORE FILTERED LISTS
+    private val allTaskLists = mutableListOf<TaskListEntity>()
+    private val filteredTaskLists = mutableListOf<TaskListEntity>()
 
-    // NEW: ENUM FOR FILTER TYPES
     private enum class FilterType {
         ALL, COMPLETED, PENDING
     }
 
-    private var currentFilter = FilterType.ALL // NEW: CURRENT FILTER STATE
+    private var currentFilter = FilterType.ALL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +79,7 @@ class HomeActivity : AppCompatActivity(),
             insets
         }
 
-        setupFilterSpinner() // NEW: SETUP FILTER SPINNER
+        setupFilterSpinner()
         setupRecyclerView()
         setupFloatingActionButton()
     }
@@ -91,7 +89,6 @@ class HomeActivity : AppCompatActivity(),
         loadTaskLists()
     }
 
-    // NEW: SETUP FILTER SPINNER
     private fun setupFilterSpinner() {
         // CREATE FILTER OPTIONS
         val filterOptions = arrayOf(
@@ -100,7 +97,7 @@ class HomeActivity : AppCompatActivity(),
             getString(R.string.filter_pending)
         )
 
-        // SETUP SPINNER ADAPTER
+        // SETUP SPINNER
         val adapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_item,
@@ -119,7 +116,7 @@ class HomeActivity : AppCompatActivity(),
                     1 -> currentFilter = FilterType.COMPLETED
                     2 -> currentFilter = FilterType.PENDING
                 }
-                applyFilter() // APPLY SELECTED FILTER
+                applyFilter()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -131,7 +128,7 @@ class HomeActivity : AppCompatActivity(),
 
     private fun setupRecyclerView() {
         taskListAdapter = TaskListAdapter(
-            filteredTaskLists, // CHANGED: USE FILTERED LISTS INSTEAD OF ALL LISTS
+            filteredTaskLists,
             onItemClick = { editTaskList(it) },
             onDeleteClick = { deleteTaskList(it) },
             db = db
@@ -195,7 +192,7 @@ class HomeActivity : AppCompatActivity(),
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@HomeActivity, "Error applying filter", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@HomeActivity, getString(R.string.text_filter_error), Toast.LENGTH_SHORT).show()
                     binding.filterContainer.visibility = View.GONE
                 }
             }
@@ -236,12 +233,12 @@ class HomeActivity : AppCompatActivity(),
                         db.taskDao().deleteAllTasksByList(taskList.id)
                         db.taskListDao().deleteTaskList(taskList)
 
-                        if (!isGuestUser && auth.currentUser != null) { // CHANGED: USE isGuestUser FLAG
+                        if (!isGuestUser && auth.currentUser != null) {
                             deleteFromFirebase(taskList)
                         }
 
                         withContext(Dispatchers.Main) {
-                            loadTaskLists() // RELOAD LISTS AFTER DELETION
+                            loadTaskLists()
                             Toast.makeText(this@HomeActivity, getString(R.string.text_list_deleted), Toast.LENGTH_SHORT).show()
                         }
                     } catch (e: Exception) {
@@ -271,7 +268,7 @@ class HomeActivity : AppCompatActivity(),
                 .delete()
                 .await()
         } catch (e: Exception) {
-            // SILENT FAIL FOR FIREBASE ERRORS
+            println(getString(R.string.text_debug_firebase_exception_occurred, e.message?: ""))
         }
     }
 
@@ -315,7 +312,7 @@ class HomeActivity : AppCompatActivity(),
                 .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
                 .invoke(mPopup, true)
         } catch (e: Exception) {
-            // IGNORE ERROR
+            println(getString(R.string.text_debug_exception_occurred, e.message?: ""))
         }
 
         popupMenu.setOnMenuItemClickListener { item ->
@@ -337,7 +334,7 @@ class HomeActivity : AppCompatActivity(),
     private fun performLogout() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                if (isGuestUser) { // CHANGED: USE isGuestUser FLAG
+                if (isGuestUser) {
                     db.userDao().updateLoginStatus(userId, false)
                 } else {
                     auth.signOut()

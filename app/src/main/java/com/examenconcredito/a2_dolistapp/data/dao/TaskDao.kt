@@ -26,11 +26,9 @@ interface TaskDao {
     @Query("DELETE FROM tasks WHERE listId IN (SELECT id FROM task_lists WHERE userId = :userId)")
     suspend fun deleteAllTasksByUser(userId: String)
 
-    // NEW: GET COUNT OF COMPLETED TASKS FOR A LIST
     @Query("SELECT COUNT(*) FROM tasks WHERE listId = :listId AND isCompleted = 1")
     suspend fun getCompletedTasksCount(listId: String): Int
 
-    // NEW: GET TOTAL COUNT OF TASKS FOR A LIST
     @Query("SELECT COUNT(*) FROM tasks WHERE listId = :listId")
     suspend fun getTotalTasksCount(listId: String): Int
 }
