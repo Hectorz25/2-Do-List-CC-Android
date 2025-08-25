@@ -81,7 +81,7 @@
     <string name="text_no_pending_lists">No tienes listas pendientes</string>
 
     <!--No Lists-->
-    <string name="text_no_list_to_show">¡Hola %s! ¿Que tal si agregamos cosas por hacer?</string>
+    <string name="text_no_list_to_show">¡Hola %s! ¿Qué tal si agregamos cosas por hacer?</string>
     <string name="text_description_add_list">Crear una lista nueva</string>
     <string name="text_create_list">Crear Lista</string>
     <string name="text_new_list_title">Mi Nueva Lista</string>
@@ -113,9 +113,9 @@
     <string name="text_create_error">Error al crear</string>
     <string name="text_load_error">Error al cargar</string>
     <string name="text_update_error">Error al actualizar</string>
-    <string name="text_error_email_signin">Error al iniciar sesióm %1$s</string>
+    <string name="text_error_email_signin">Error al iniciar sesión %1$s</string>
     <string name="text_logout_error">Error al cerrar sesión</string>
-    <string name="text_debug_exception_occurred">Debug: Ocurrió una exceptión: %1$s</string>
+    <string name="text_debug_exception_occurred">Debug: Ocurrió una excepción: %1$s</string>
     <string name="text_debug_fatal_error_oncreate">Debug: Error fatal en OnCreate: %1$s</string>
     <string name="text_debug_logout_error">Debug: Logout error: %1$s</string>
     <string name="text_debug_firebase_exception_occurred">Debug: Excepción en Firebase: %1$s</string>
